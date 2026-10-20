@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social App - Chat</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .phone-frame {
+      width: 360px;
+      height: 680px;
+      background: #111;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 4px solid #333;
+      position: relative;
+    }
+
+    .screen {
+      width: 100%;
+      height: 100%;
+      /* Sfondo con aereo di carta coerente con l'app */
+      background: url('https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+      border-radius: 28px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(120, 160, 200, 0.35);
+      z-index: 1;
+    }
+
+    .chat-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .header-title {
+      text-align: center;
+      color: white;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+      margin-bottom: 10px;
+    }
+
+    /* Lista Utenti */
+    .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 5px;
+    }
+
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .flag-icon {
+      width: 32px;
+      height: 22px;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .username {
+      font-weight: 700;
+      font-size: 16px;
+      color: #000;
+      line-height: 1.1;
+    }
+
+    .stars {
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    /* Colori Stelle */
+    .stars.purple { color: #caa5f7; }
+    .stars.slate { color: #516d91; }
+    .stars.green { color: #82da3d; }
+    .stars.red { color: #ef233c; }
+
+    /* Sezione Messaggio */
+    .message-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .message-label {
+      font-size: 20px;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .message-box {
+      width: 100%;
+      height: 75px;
+      background: white;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      font-size: 16px;
+      color: #a0522d;
+      outline: none;
+      resize: none;
+    }
+
+    .send-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 4px;
+    }
+
+    .selected-user {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .selected-user .username {
+      font-size: 15px;
+    }
+
+    .selected-user .stars {
+      font-size: 15px;
+      color: #4b6282;
+    }
+
+    .btn-send {
+      background: #e2d8c3;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.1s;
+    }
+
+    .btn-send:active {
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <div class="screen">
+      <div class="chat-container">
+        
+        <!-- Titolo -->
+        <h1 class="header-title">CHAT</h1>
+
+        <!-- Lista Utenti -->
+        <div class="user-list">
+          <!-- Rick34 (Francia) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/fr.png" alt="Francia">
+            <div class="user-info">
+              <span class="username">Rick34</span>
+              <span class="stars purple">★★★★</span>
+            </div>
+          </div>
+
+          <!-- Alex12 (Germania) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/de.png" alt="Germania">
+            <div class="user-info">
+              <span class="username">Alex12</span>
+              <span class="stars slate">★★</span>
+            </div>
+          </div>
+
+          <!-- Pippo3 (Italia) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/it.png" alt="Italia">
+            <div class="user-info">
+              <span class="username">Pippo3</span>
+              <span class="stars green">★★★</span>
+            </div>
+          </div>
+
+          <!-- Edu_78 (Spagna) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/es.png" alt="Spagna">
+            <div class="user-info">
+              <span class="username">Edu_78</span>
+              <span class="stars red">★★★★★</span>
+            </div>
+          </div>
+
+          <!-- Tod_3 (USA) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/us.png" alt="USA">
+            <div class="user-info">
+              <span class="username">Tod_3</span>
+              <span class="stars green">★★★</span>
+            </div>
+          </div>
+
+          <!-- Liu09 (Cina) -->
+          <div class="user-item">
+            <img class="flag-icon" src="https://flagcdn.com/w40/cn.png" alt="Cina">
+            <div class="user-info">
+              <span class="username">Liu09</span>
+              <span class="stars slate">★★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sezione Messaggio -->
+        <div class="message-section">
+          <label class="message-label">Messaggio</label>
+          <textarea class="message-box" placeholder="Dear Rick.....">Dear Rick.....</textarea>
+          
+          <div class="send-row">
+            <div class="selected-user">
+              <span class="username">Rick34</span>
+              <span class="stars slate">★★★★</span>
+            </div>
+            <button class="btn-send">INVIA</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
