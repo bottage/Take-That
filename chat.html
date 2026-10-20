@@ -72,7 +72,32 @@
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
       margin-bottom: 10px;
     }
+/* Intestazione con pulsante indietro */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
+.back-btn {
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn:hover {
+  background: rgba(0, 0, 0, 0.45);
+}
     /* Lista Utenti */
     .user-list {
       display: flex;
@@ -192,8 +217,12 @@
     <div class="screen">
       <div class="chat-container">
         
-        <!-- Titolo -->
-        <h1 class="header-title">CHAT</h1>
+<!-- Barra superiore con tasto Indietro e Titolo -->
+<div class="top-bar">
+    <a href="index.html" class="back-btn">←</a>
+    <h1 class="header-title" style="margin-bottom: 0;">CHAT</h1>
+    <div style="width: 36px;"></div> <!-- Spaziatore ridotto per centrare perfettamente il titolo -->
+  </div>
 
         <!-- Lista Utenti -->
         <div class="user-list">

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social App - Scatta</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .phone-frame {
+            width: 360px;
+            height: 720px;
+            background: #111;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 16px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(20, 70, 140, 0.45);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .top-bar, .step {
+            position: relative;
+            z-index: 2;
+        }
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+        .back-btn {
+            background: rgba(0, 0, 0, 0.25);
+            color: white;
+            text-decoration: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-title {
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .step {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .step.active {
+            display: flex;
+        }
+        .hint {
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.35;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+        .viewfinder {
+            flex: 1;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+            border: 3px solid rgba(255,255,255,0.55);
+            background: #222;
+        }
+        .viewfinder img,
+        .polaroid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .viewfinder.flash::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: white;
+            animation: flash 0.35s ease-out;
+        }
+        @keyframes flash {
+            from { opacity: 0.9; }
+            to { opacity: 0; }
+        }
+        .corner {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #fff;
+            z-index: 2;
+        }
+        .corner.tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+        .corner.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+        .corner.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+        .corner.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+        .cam-badge {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.45);
+            color: #fff;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+        .shutter-wrap {
+            display: flex;
+            justify-content: center;
+            padding-top: 16px;
+        }
+        .shutter {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            background: radial-gradient(circle at 35% 30%, #90caf9, #1565c0);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+            cursor: pointer;
+        }
+        .shutter:active {
+            transform: scale(0.94);
+        }
+        .polaroid {
+            background: #fff;
+            padding: 8px 8px 28px;
+            border-radius: 4px;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+            height: 250px;
+            margin: 8px auto 14px;
+            width: 92%;
+        }
+        .polaroid img {
+            height: calc(100% - 0px);
+            border-radius: 2px;
+        }
+        .btn {
+            background: linear-gradient(145deg, #2196F3, #0d47a1);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 13px 18px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25), inset 0 2px 2px rgba(255,255,255,0.3);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .btn.ghost {
+            background: rgba(255,255,255,0.18);
+            box-shadow: none;
+            border: 1px solid rgba(255,255,255,0.45);
+        }
+        .btn:active { transform: scale(0.97); }
+        .radar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .rings {
+            width: 180px;
+            height: 180px;
+            position: relative;
+            margin-bottom: 18px;
+        }
+        .rings span {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(255,255,255,0.55);
+            border-radius: 50%;
+            animation: pulse 2.4s ease-out infinite;
+        }
+        .rings span:nth-child(2) { animation-delay: 0.8s; }
+        .rings span:nth-child(3) { animation-delay: 1.6s; }
+        .core {
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            left: 50%;
+            top: 50%;
+            margin-left: -27px;
+            margin-top: -27px;
+            background: linear-gradient(145deg, #2196F3, #0d47a1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            box-shadow: 0 0 0 8px rgba(255,255,255,0.15);
+            z-index: 2;
+            pointer-events: none;
+        }
+        @keyframes pulse {
+            from { transform: scale(0.35); opacity: 0.8; }
+            to { transform: scale(1.15); opacity: 0; }
+        }
+        .status {
+            color: #fff;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-align: center;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+        }
+        .sub {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            text-align: center;
+            margin-top: 6px;
+        }
+        .partner {
+            background: rgba(255,255,255,0.92);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+            margin: 12px 0 16px;
+        }
+        .flag-icon {
+            width: 42px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+        }
+        .username { font-weight: 800; font-size: 18px; color: #111; }
+        .stars { letter-spacing: 1px; color: #82da3d; }
+        .timer-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .clock {
+            font-size: 48px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.45);
+            margin: 8px 0 6px;
+        }
+        .offer-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 16px;
+            padding: 18px 16px;
+            text-align: center;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+            margin-top: 8px;
+        }
+        .sealed {
+            height: 140px;
+            border-radius: 10px;
+            background: repeating-linear-gradient(135deg, #cfd8dc, #cfd8dc 12px, #b0bec5 12px, #b0bec5 24px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #37474f;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .row {
+            display: flex;
+            gap: 8px;
+        }
+        .done-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0 16px;
+        }
+        .mini {
+            background: #fff;
+            padding: 5px 5px 22px;
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .mini img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+        }
+        .mini span {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="top-bar">
+                <a href="index.html" class="back-btn">←</a>
+                <h1 class="header-title" id="pageTitle">SCATTA</h1>
+                <div style="width: 36px;"></div>
+            </div>
+
+            <!-- 1. Mirino (niente fotocamera vera) -->
+            <div class="step active" id="step-camera">
+                <p class="hint">Solo tasto otturatore. Niente galleria, niente incolla.</p>
+                <div class="viewfinder" id="viewfinder">
+                    <span class="cam-badge">LIVE · SOLO TELECAMERA</span>
+                    <span class="corner tl"></span>
+                    <span class="corner tr"></span>
+                    <span class="corner bl"></span>
+                    <span class="corner br"></span>
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Mirino">
+                </div>
+                <div class="shutter-wrap">
+                    <button class="shutter" type="button" aria-label="Scatta" onclick="scatta()"></button>
+                </div>
+            </div>
+
+            <!-- 2. Foto pronta -->
+            <div class="step" id="step-preview">
+                <p class="hint">La tua foto è unica e resta sul telefono finché qualcuno accetta.</p>
+                <div class="polaroid">
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Foto scattata">
+                </div>
+                <button class="btn" type="button" onclick="cerca()">INVIA NEL MONDO</button>
+                <button class="btn ghost" type="button" onclick="mostra('camera')">RISCATTA</button>
+            </div>
+
+            <!-- 3. In attesa -->
+            <div class="step" id="step-wait">
+                <div class="radar">
+                    <div class="rings">
+                        <span></span><span></span><span></span>
+                        <div class="core">✈</div>
+                    </div>
+                    <div class="status" id="waitStatus">CERCO UN MATCH</div>
+                    <div class="sub" id="waitSub">La tua offerta resta visibile 30 minuti.<br>Gli altri vedono solo paese e ora, non la foto.</div>
+                </div>
+                <button class="btn ghost" type="button" onclick="mostra('offer')">COME LO VEDE L'ALTRO</button>
+            </div>
+
+            <!-- 4. Vista di chi riceve l'invito -->
+            <div class="step" id="step-offer">
+                <p class="hint">Qualcuno nel mondo ha appena scattato e cerca uno scambio.</p>
+                <div class="offer-card">
+                    <div class="sealed">FOTO SIGILLATA</div>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+                        <img class="flag-icon" src="https://flagcdn.com/w40/it.png" alt="Italia">
+                        <div style="text-align:left;">
+                            <div class="username">Tu?</div>
+                            <div class="sub" style="color:#333;margin:0;">Italia · adesso</div>
+                        </div>
+                    </div>
+                    <p class="sub" style="color:#444;">Se accetti hai 30 minuti per scattare la tua e mandarla.</p>
+                </div>
+                <div class="row" style="margin-top:14px;">
+                    <button class="btn ghost" type="button" onclick="mostra('wait')">RIFIUTA</button>
+                    <button class="btn" type="button" onclick="match()">ACCETTA</button>
+                </div>
+            </div>
+
+            <!-- 5. Match -->
+            <div class="step" id="step-match">
+                <p class="hint">Match trovato. Lui ha accettato: ora deve scattare entro mezz’ora.</p>
+                <div class="partner">
+                    <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
+                    <div>
+                        <div class="username">Aiko_22</div>
+                        <div class="stars">★★★★</div>
+                        <div class="sub" style="color:#333;text-align:left;margin:0;">Giappone · Tokyo</div>
+                    </div>
+                </div>
+                <button class="btn" type="button" onclick="avviaTimer()">ASPETTA LA SUA FOTO</button>
+            </div>
+
+            <!-- 6. Timer -->
+            <div class="step" id="step-timer">
+                <div class="timer-box">
+                    <div class="sub">Tempo rimasto ad Aiko_22</div>
+                    <div class="clock" id="clock">29:47</div>
+                    <p class="hint">Tu hai già inviato. Quando arriva la sua, va nell’album.</p>
+                    <div class="partner" style="width:100%;">
+                        <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
+                        <div>
+                            <div class="username">Aiko_22</div>
+                            <div class="stars">★★★★</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" type="button" onclick="mostra('done')">SIMULA FOTO ARRIVATA</button>
+            </div>
+
+            <!-- 7. Scambio fatto -->
+            <div class="step" id="step-done">
+                <p class="hint">Scambio unico completato. La sua foto è nell’album.</p>
+                <div class="done-grid">
+                    <div class="mini">
+                        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80" alt="Tua">
+                        <span>LA TUA</span>
+                    </div>
+                    <div class="mini">
+                        <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=80" alt="Sua">
+                        <span>LA SUA</span>
+                    </div>
+                </div>
+                <a class="btn" href="album.html" style="text-decoration:none;display:block;text-align:center;">VAI ALL’ALBUM</a>
+                <button class="btn ghost" type="button" onclick="mostra('camera')">NUOVO SCATTO</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const titles = {
+            camera: 'SCATTA',
+            preview: 'SCATTA',
+            wait: 'IN ATTESA',
+            offer: 'INVITO',
+            match: 'MATCH',
+            timer: 'TIMER',
+            done: 'SCAMBIO'
+        };
+        let waitTimers = [];
+
+        function mostra(name) {
+            waitTimers.forEach(clearTimeout);
+            waitTimers = [];
+            document.querySelectorAll('.step').forEach(function (el) {
+                el.classList.toggle('active', el.id === 'step-' + name);
+            });
+            document.getElementById('pageTitle').textContent = titles[name];
+            if (name === 'wait') avviaAttesa();
+        }
+
+        function scatta() {
+            const vf = document.getElementById('viewfinder');
+            vf.classList.remove('flash');
+            void vf.offsetWidth;
+            vf.classList.add('flash');
+            setTimeout(function () { mostra('preview'); }, 280);
+        }
+
+        function cerca() {
+            mostra('wait');
+        }
+
+        function avviaAttesa() {
+            const status = document.getElementById('waitStatus');
+            const sub = document.getElementById('waitSub');
+            status.textContent = 'CERCO UN MATCH';
+            sub.innerHTML = 'La tua offerta resta visibile 30 minuti.<br>Gli altri vedono solo paese e ora, non la foto.';
+            waitTimers.push(setTimeout(function () {
+                status.textContent = 'ALLARGO LA RICERCA';
+                sub.textContent = 'Città → Paese → Mondo';
+            }, 1800));
+            waitTimers.push(setTimeout(function () {
+                mostra('match');
+            }, 3800));
+        }
+
+        function match() {
+            mostra('match');
+        }
+
+        function avviaTimer() {
+            mostra('timer');
+            var total = 29 * 60 + 47;
+            var el = document.getElementById('clock');
+            function tick() {
+                var m = Math.floor(total / 60);
+                var s = total % 60;
+                el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+                if (total > 0) {
+                    total -= 1;
+                    waitTimers.push(setTimeout(tick, 1000));
+                }
+            }
+            tick();
+        }
+    </script>
+</body>
+</html>
