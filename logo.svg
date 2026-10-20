@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 560" role="img" aria-label="Take That">
+  <defs>
+    <linearGradient id="ring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4FC3F7"/>
+      <stop offset="0.5" stop-color="#1E88E5"/>
+      <stop offset="1" stop-color="#1565C0"/>
+    </linearGradient>
+    <clipPath id="globe">
+      <circle cx="240" cy="336" r="84"/>
+    </clipPath>
+  </defs>
+  <rect width="480" height="560" fill="#ffffff"/>
+  <text x="240" y="76" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="800" fill="#1565C0">Take That</text>
+  <g>
+    <circle cx="240" cy="336" r="128" fill="none" stroke="url(#ring)" stroke-width="36" stroke-linecap="round" stroke-dasharray="620 184" transform="rotate(128 240 336)"/>
+    <circle cx="240" cy="336" r="100" fill="#ffffff"/>
+    <g clip-path="url(#globe)">
+      <rect x="156" y="252" width="168" height="168" fill="#e7f1fa"/>
+      <rect x="158" y="254" width="40" height="40" fill="#c62828"/>
+      <rect x="200" y="254" width="40" height="40" fill="#f7f9fc"/>
+      <rect x="242" y="254" width="40" height="40" fill="#1565C0"/>
+      <rect x="284" y="254" width="40" height="40" fill="#f9a825"/>
+      <rect x="158" y="296" width="40" height="40" fill="#f7f9fc"/>
+      <rect x="200" y="296" width="40" height="40" fill="#1565C0"/>
+      <rect x="242" y="296" width="40" height="40" fill="#2e7d32"/>
+      <rect x="284" y="296" width="40" height="40" fill="#c62828"/>
+      <rect x="158" y="338" width="40" height="40" fill="#1565C0"/>
+      <rect x="200" y="338" width="40" height="40" fill="#f9a825"/>
+      <rect x="242" y="338" width="40" height="40" fill="#f7f9fc"/>
+      <rect x="284" y="338" width="40" height="40" fill="#1565C0"/>
+      <rect x="158" y="380" width="40" height="40" fill="#2e7d32"/>
+      <rect x="200" y="380" width="40" height="40" fill="#c62828"/>
+      <rect x="242" y="380" width="40" height="40" fill="#1565C0"/>
+      <rect x="284" y="380" width="40" height="40" fill="#f7f9fc"/>
+    </g>
+    <circle cx="240" cy="336" r="84" fill="none" stroke="#ffffff" stroke-width="3"/>
+  </g>
+</svg>
