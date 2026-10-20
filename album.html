@@ -39,6 +39,10 @@
             padding: 25px 15px;
             position: relative;
             overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .screen::-webkit-scrollbar {
+            display: none;
         }
         .screen::before {
             content: '';
@@ -54,45 +58,38 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 16px;
             z-index: 2;
         }
         .back-btn {
             position: absolute;
             left: 0;
-            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1565C0;
             text-decoration: none;
-            font-size: 24px;
-            font-weight: normal;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            background: #fff;
+            border: none;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+            transition: background 0.2s, transform 0.12s, color 0.2s;
         }
-
-        /* Barra superiore con freccia e titolo */
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.back-btn {
-  background: rgba(0, 0, 0, 0.25);
-  color: white;
-  text-decoration: none;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 18px;
-  font-weight: bold;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  transition: background 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-btn:hover {
-  background: rgba(0, 0, 0, 0.45);
-}
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+            margin-left: -2px;
+        }
+        .back-btn:hover {
+            background: #f3f8ff;
+            color: #0d47a1;
+        }
+        .back-btn:active {
+            transform: scale(0.94);
+        }
 
         .title {
             color: white;
@@ -104,27 +101,166 @@
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
             z-index: 2;
             position: relative;
-            padding-bottom: 20px;
+            padding-bottom: 4px;
         }
         .card {
             background: white;
             border-radius: 4px;
-            padding: 4px; /* Bordino bianco polaroid */
+            padding: 4px 4px 6px;
             box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            aspect-ratio: 4/3; /* Formato rettangolare tipico delle foto */
-            overflow: hidden;
         }
-        .card img {
+        .photo-btn {
+            display: block;
             width: 100%;
-            height: 100%;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .photo-btn:active .photo {
+            opacity: 0.82;
+        }
+        .card .photo {
+            width: 100%;
+            aspect-ratio: 4/3;
             object-fit: cover;
             display: block;
             border-radius: 2px;
         }
+        .viewer {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            z-index: 5;
+            background: #050505;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        .viewer[hidden] {
+            display: none;
+        }
+        .viewer-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #050505;
+        }
+        .viewer .back-btn {
+            top: 16px;
+            left: 16px;
+            z-index: 2;
+        }
+        .viewer-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 36px 16px 18px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+        }
+        .viewer-sender {
+            min-width: 0;
+            flex: 1;
+        }
+        .viewer-sender .sender {
+            padding: 0;
+        }
+        .viewer-chat {
+            flex-shrink: 0;
+            background: #fff;
+            color: #1565C0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+        }
+        .viewer-chat:hover {
+            background: #f3f8ff;
+        }
+        .viewer-chat:active {
+            transform: scale(0.96);
+        }
+        .viewer .name {
+            color: #fff;
+            font-size: 15px;
+        }
+        .viewer .origin {
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 12px;
+        }
+        .viewer .stars {
+            font-size: 12px;
+        }
+        .viewer .stars.purple { color: #d7b8ff; }
+        .viewer .stars.slate { color: #c5d4ea; }
+        .viewer .flag {
+            width: 22px;
+            height: 15px;
+        }
+        .sender {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 3px 1px;
+        }
+        .flag {
+            width: 18px;
+            height: 12px;
+            object-fit: cover;
+            border-radius: 1px;
+            flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+        }
+        .sender-meta {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #111;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .origin-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+        }
+        .origin {
+            font-size: 10px;
+            color: #555;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .stars {
+            font-size: 9px;
+            line-height: 1;
+            letter-spacing: 0.4px;
+        }
+        .stars.purple { color: #8d5fd4; }
+        .stars.slate { color: #516d91; }
+        .stars.green { color: #82da3d; }
+        .stars.red { color: #ef233c; }
     </style>
 </head>
 <body>
@@ -132,38 +268,164 @@
         <div class="screen">
             
             <div class="header">
-                <a href="index.html" class="back-btn">←</a>
+                <a href="index.html" class="back-btn" aria-label="Indietro">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
                 <div class="title">ALBUM</div>
             </div>
 
             <div class="grid-container">
-                <!-- 1. Concerto -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1540039155733-56f1c328c9d0?w=400&q=80" alt="Concerto">
+                <div class="card" data-user="aiko">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Aiko_22">
+                        <img class="photo" src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=80" alt="Tokyo, Aiko_22">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/jp.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Aiko_22</span>
+                            <span class="origin-row"><span class="origin">Giappone</span><span class="stars green">★★★★</span></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- 2. Fuochi d'artificio -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80" alt="Fuochi">
+                <div class="card" data-user="rick">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Rick34">
+                        <img class="photo" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=80" alt="Concerto, Rick34">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/fr.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Rick34</span>
+                            <span class="origin-row"><span class="origin">Francia</span><span class="stars purple">★★★★</span></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- 3. Libri -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&q=80" alt="Libri">
+                <div class="card" data-user="alex">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Alex12">
+                        <img class="photo" src="https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80" alt="Fuochi, Alex12">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/de.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Alex12</span>
+                            <span class="origin-row"><span class="origin">Germania</span><span class="stars slate">★★</span></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- 4. Maratona -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1552674605-171d31fea3fa?w=400&q=80" alt="Maratona">
+                <div class="card" data-user="pippo">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Pippo3">
+                        <img class="photo" src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&q=80" alt="Libri, Pippo3">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/it.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Pippo3</span>
+                            <span class="origin-row"><span class="origin">Italia</span><span class="stars green">★★★</span></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- 5. Torta al cioccolato -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80" alt="Torta">
+                <div class="card" data-user="edu">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Edu_78">
+                        <img class="photo" src="https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=400&q=80" alt="Maratona, Edu_78">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/es.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Edu_78</span>
+                            <span class="origin-row"><span class="origin">Spagna</span><span class="stars red">★★★★★</span></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- 6. Cuccioli -->
-                <div class="card">
-                    <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&q=80" alt="Cuccioli">
+                <div class="card" data-user="tod">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Tod_3">
+                        <img class="photo" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80" alt="Torta, Tod_3">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/us.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Tod_3</span>
+                            <span class="origin-row"><span class="origin">USA</span><span class="stars green">★★★</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" data-user="liu">
+                    <button type="button" class="photo-btn" aria-label="Apri la foto di Liu09">
+                        <img class="photo" src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&q=80" alt="Cuccioli, Liu09">
+                    </button>
+                    <div class="sender">
+                        <img class="flag" src="https://flagcdn.com/w40/cn.png" alt="">
+                        <div class="sender-meta">
+                            <span class="name">Liu09</span>
+                            <span class="origin-row"><span class="origin">Cina</span><span class="stars slate">★★</span></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
+        <div class="viewer" id="viewer" hidden>
+            <button type="button" class="back-btn" id="viewerClose" aria-label="Chiudi">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <img class="viewer-photo" id="viewerPhoto" alt="">
+            <div class="viewer-caption">
+                <div class="viewer-sender" id="viewerSender"></div>
+                <a class="viewer-chat" id="viewerChat" href="chat.html">Chat</a>
+            </div>
+        </div>
     </div>
+    <script>
+        var viewer = document.getElementById('viewer');
+        var viewerPhoto = document.getElementById('viewerPhoto');
+        var viewerSender = document.getElementById('viewerSender');
+        var viewerChat = document.getElementById('viewerChat');
+        var params = new URLSearchParams(location.search);
+        var openedFrom = params.get('from');
+        var openedUser = params.get('user');
+
+        function apriFoto(card) {
+            var img = card.querySelector('.photo');
+            var sender = card.querySelector('.sender');
+            var user = card.getAttribute('data-user');
+            viewerPhoto.src = img.src.replace('w=400', 'w=1200');
+            viewerPhoto.alt = img.alt;
+            viewerSender.innerHTML = sender.innerHTML;
+            viewerChat.href = 'chat.html?user=' + encodeURIComponent(user);
+            viewer.hidden = false;
+        }
+
+        function chiudiFoto() {
+            if (openedFrom === 'list' && openedUser && /^[a-z]+$/.test(openedUser)) {
+                location.href = 'chat.html';
+                return;
+            }
+            if (openedFrom === 'chat' && openedUser && /^[a-z]+$/.test(openedUser)) {
+                location.href = 'chat.html?user=' + encodeURIComponent(openedUser);
+                return;
+            }
+            viewer.hidden = true;
+            viewerPhoto.removeAttribute('src');
+            viewerSender.innerHTML = '';
+        }
+
+        document.querySelectorAll('.photo-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                apriFoto(btn.parentElement);
+            });
+        });
+
+        if (openedUser && /^[a-z]+$/.test(openedUser)) {
+            var card = document.querySelector('.card[data-user="' + openedUser + '"]');
+            if (card) apriFoto(card);
+        }
+
+        document.getElementById('viewerClose').addEventListener('click', chiudiFoto);
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !viewer.hidden) chiudiFoto();
+        });
+    </script>
 </body>
 </html>

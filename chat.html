@@ -35,7 +35,6 @@
     .screen {
       width: 100%;
       height: 100%;
-      /* Sfondo con aereo di carta coerente con l'app */
       background: url('https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
       border-radius: 28px;
       display: flex;
@@ -60,7 +59,11 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .chat-container[hidden] {
+      display: none;
     }
 
     .header-title {
@@ -70,133 +73,231 @@
       font-weight: 800;
       letter-spacing: 2px;
       text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-      margin-bottom: 10px;
     }
-/* Intestazione con pulsante indietro */
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
 
-.back-btn {
-  background: rgba(0, 0, 0, 0.25);
-  color: white;
-  text-decoration: none;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 18px;
-  font-weight: bold;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  transition: background 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+    }
 
-.back-btn:hover {
-  background: rgba(0, 0, 0, 0.45);
-}
-    /* Lista Utenti */
+    #threadView .top-bar {
+      gap: 16px;
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #1565C0;
+      text-decoration: none;
+      background: #fff;
+      border: none;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s, color 0.2s;
+    }
+
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      margin-left: -2px;
+    }
+
+    .back-btn:hover {
+      background: #f3f8ff;
+      color: #0d47a1;
+    }
+
+    .back-btn:active {
+      transform: scale(0.94);
+    }
+
     .user-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      padding-left: 5px;
+      gap: 8px;
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .user-list::-webkit-scrollbar {
+      display: none;
     }
 
     .user-item {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      width: 100%;
+      background: #fff;
+      border-radius: 4px;
+      padding: 8px 8px 8px 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-item .stars.purple { color: #7a45c4; }
+    .user-item .stars.slate { color: #3e5674; }
+    .user-item .stars.green { color: #2f9a1f; }
+    .user-item .stars.red { color: #d9263a; }
+
+    .open-chat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+
+    .photo-link {
+      flex-shrink: 0;
+      line-height: 0;
+    }
+
+    .user-item .photo-link {
+      margin-left: auto;
+    }
+
+    .mini-photo {
+      width: 58px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 3px 7px rgba(0, 0, 0, 0.28);
     }
 
     .flag-icon {
-      width: 32px;
-      height: 22px;
+      width: 30px;
+      height: 20px;
       object-fit: cover;
       border-radius: 2px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.22);
+      flex-shrink: 0;
+      background: #f2f2f2;
     }
 
     .user-info {
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      gap: 1px;
     }
 
     .username {
       font-weight: 700;
-      font-size: 16px;
-      color: #000;
-      line-height: 1.1;
+      font-size: 15px;
+      color: #1a1a1a;
+      line-height: 1.15;
+      letter-spacing: -0.2px;
     }
 
     .stars {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      margin-top: 1px;
     }
 
-    /* Colori Stelle */
     .stars.purple { color: #caa5f7; }
     .stars.slate { color: #516d91; }
     .stars.green { color: #82da3d; }
     .stars.red { color: #ef233c; }
 
-    /* Sezione Messaggio */
-    .message-section {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .greeting {
+      font-size: 12px;
+      color: #7a5344;
+      line-height: 1.2;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .message-label {
+    .thread-who {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      margin-left: 12px;
+    }
+
+    .thread-who .username {
+      color: #fff;
       font-size: 20px;
-      font-weight: 500;
-      color: #000;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .thread {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 6px 2px 12px;
+      scrollbar-width: none;
+    }
+
+    .thread::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bubble {
+      align-self: flex-end;
+      max-width: 82%;
+      background: #fff;
+      color: #a0522d;
+      border-radius: 16px 16px 4px 16px;
+      padding: 10px 12px;
+      font-size: 15px;
+      line-height: 1.3;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .composer {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .message-box {
-      width: 100%;
-      height: 75px;
+      flex: 1;
+      width: auto;
+      height: 52px;
       background: white;
       border-radius: 16px;
       padding: 12px;
       border: 1px solid #ccc;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
       font-size: 16px;
+      font-family: inherit;
       color: #a0522d;
       outline: none;
       resize: none;
-    }
-
-    .send-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: 4px;
-    }
-
-    .selected-user {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .selected-user .username {
-      font-size: 15px;
-    }
-
-    .selected-user .stars {
-      font-size: 15px;
-      color: #4b6282;
     }
 
     .btn-send {
       background: #e2d8c3;
       border: 1px solid #555;
       border-radius: 8px;
-      padding: 8px 24px;
+      padding: 12px 16px;
       font-size: 16px;
       font-weight: 700;
       letter-spacing: 1px;
@@ -215,89 +316,258 @@
 
   <div class="phone-frame">
     <div class="screen">
-      <div class="chat-container">
-        
-<!-- Barra superiore con tasto Indietro e Titolo -->
-<div class="top-bar">
-    <a href="index.html" class="back-btn">←</a>
-    <h1 class="header-title" style="margin-bottom: 0;">CHAT</h1>
-    <div style="width: 36px;"></div> <!-- Spaziatore ridotto per centrare perfettamente il titolo -->
-  </div>
 
-        <!-- Lista Utenti -->
+      <div class="chat-container" id="listView">
+        <div class="top-bar">
+          <a href="index.html" class="back-btn" aria-label="Indietro">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <h1 class="header-title">CHAT</h1>
+          <div style="width: 40px;"></div>
+        </div>
+
         <div class="user-list">
-          <!-- Rick34 (Francia) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/fr.png" alt="Francia">
-            <div class="user-info">
-              <span class="username">Rick34</span>
-              <span class="stars purple">★★★★</span>
-            </div>
+          <div class="user-item" data-user="rick">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/fr.png" alt="Francia">
+              <div class="user-info">
+                <span class="username">Rick34</span>
+                <span class="stars purple">★★★★</span>
+                <span class="greeting">Dear Rick.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=rick&from=list" aria-label="Apri la foto di Rick34">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=80" alt="">
+            </a>
           </div>
 
-          <!-- Alex12 (Germania) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/de.png" alt="Germania">
-            <div class="user-info">
-              <span class="username">Alex12</span>
-              <span class="stars slate">★★</span>
-            </div>
+          <div class="user-item" data-user="alex">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/de.png" alt="Germania">
+              <div class="user-info">
+                <span class="username">Alex12</span>
+                <span class="stars slate">★★</span>
+                <span class="greeting">Hallo Alex.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=alex&from=list" aria-label="Apri la foto di Alex12">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1498931299472-f7a63a5a1cfa?w=400&q=80" alt="">
+            </a>
           </div>
 
-          <!-- Pippo3 (Italia) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/it.png" alt="Italia">
-            <div class="user-info">
-              <span class="username">Pippo3</span>
-              <span class="stars green">★★★</span>
-            </div>
+          <div class="user-item" data-user="pippo">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/it.png" alt="Italia">
+              <div class="user-info">
+                <span class="username">Pippo3</span>
+                <span class="stars green">★★★</span>
+                <span class="greeting">Ciao Pippo.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=pippo&from=list" aria-label="Apri la foto di Pippo3">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&q=80" alt="">
+            </a>
           </div>
 
-          <!-- Edu_78 (Spagna) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/es.png" alt="Spagna">
-            <div class="user-info">
-              <span class="username">Edu_78</span>
-              <span class="stars red">★★★★★</span>
-            </div>
+          <div class="user-item" data-user="edu">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/es.png" alt="Spagna">
+              <div class="user-info">
+                <span class="username">Edu_78</span>
+                <span class="stars red">★★★★★</span>
+                <span class="greeting">Hola Edu.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=edu&from=list" aria-label="Apri la foto di Edu_78">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=400&q=80" alt="">
+            </a>
           </div>
 
-          <!-- Tod_3 (USA) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/us.png" alt="USA">
-            <div class="user-info">
-              <span class="username">Tod_3</span>
-              <span class="stars green">★★★</span>
-            </div>
+          <div class="user-item" data-user="tod">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/us.png" alt="USA">
+              <div class="user-info">
+                <span class="username">Tod_3</span>
+                <span class="stars green">★★★</span>
+                <span class="greeting">Hey Tod.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=tod&from=list" aria-label="Apri la foto di Tod_3">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&q=80" alt="">
+            </a>
           </div>
 
-          <!-- Liu09 (Cina) -->
-          <div class="user-item">
-            <img class="flag-icon" src="https://flagcdn.com/w40/cn.png" alt="Cina">
-            <div class="user-info">
-              <span class="username">Liu09</span>
-              <span class="stars slate">★★</span>
-            </div>
+          <div class="user-item" data-user="liu">
+            <button type="button" class="open-chat">
+              <img class="flag-icon" src="https://flagcdn.com/w80/cn.png" alt="Cina">
+              <div class="user-info">
+                <span class="username">Liu09</span>
+                <span class="stars slate">★★</span>
+                <span class="greeting">Hi Liu.....</span>
+              </div>
+            </button>
+            <a class="photo-link" href="album.html?user=liu&from=list" aria-label="Apri la foto di Liu09">
+              <img class="mini-photo" src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&q=80" alt="">
+            </a>
           </div>
         </div>
-
-        <!-- Sezione Messaggio -->
-        <div class="message-section">
-          <label class="message-label">Messaggio</label>
-          <textarea class="message-box" placeholder="Dear Rick.....">Dear Rick.....</textarea>
-          
-          <div class="send-row">
-            <div class="selected-user">
-              <span class="username">Rick34</span>
-              <span class="stars slate">★★★★</span>
-            </div>
-            <button class="btn-send">INVIA</button>
-          </div>
-        </div>
-
       </div>
+
+      <div class="chat-container" id="threadView" hidden>
+        <div class="top-bar">
+          <button type="button" class="back-btn" id="backToList" aria-label="Torna alle chat">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="thread-who">
+            <img class="flag-icon" id="threadFlag" alt="">
+            <div>
+              <div class="username" id="threadName"></div>
+              <div class="stars" id="threadStars"></div>
+            </div>
+          </div>
+          <a class="photo-link" id="threadPhoto" href="album.html">
+            <img class="mini-photo" id="threadPhotoImg" alt="">
+          </a>
+        </div>
+        <div class="thread" id="thread"></div>
+        <form class="composer" id="composer">
+          <textarea class="message-box" id="messageBox" placeholder="Scrivi..." aria-label="Messaggio"></textarea>
+          <button class="btn-send" type="submit">INVIA</button>
+        </form>
+      </div>
+
     </div>
   </div>
+  <script>
+    var known = { aiko: 1, rick: 1, alex: 1, pippo: 1, edu: 1, tod: 1, liu: 1 };
+    var listView = document.getElementById('listView');
+    var threadView = document.getElementById('threadView');
+    var thread = document.getElementById('thread');
+    var messageBox = document.getElementById('messageBox');
+    var currentId = '';
+    var threads = {};
 
+    try {
+      threads = JSON.parse(sessionStorage.getItem('take-that-threads') || '{}');
+    } catch (e) {
+      threads = {};
+    }
+
+    function salva() {
+      sessionStorage.setItem('take-that-threads', JSON.stringify(threads));
+    }
+
+    function aggiungiAiko() {
+      if (document.querySelector('.user-item[data-user="aiko"]')) return;
+      var row = document.createElement('div');
+      row.className = 'user-item';
+      row.setAttribute('data-user', 'aiko');
+      row.innerHTML = ''
+        + '<button type="button" class="open-chat">'
+        + '<img class="flag-icon" src="https://flagcdn.com/w80/jp.png" alt="Giappone">'
+        + '<div class="user-info">'
+        + '<span class="username">Aiko_22</span>'
+        + '<span class="stars green">★★★★</span>'
+        + '<span class="greeting">Ciao Aiko.....</span>'
+        + '</div></button>'
+        + '<a class="photo-link" href="album.html?user=aiko&from=list" aria-label="Apri la foto di Aiko_22">'
+        + '<img class="mini-photo" src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=400&q=80" alt="">'
+        + '</a>';
+      document.querySelector('.user-list').insertBefore(row, document.querySelector('.user-list').firstChild);
+    }
+
+    function messaggiDi(item) {
+      var id = item.getAttribute('data-user');
+      if (!threads[id] || !threads[id].length) {
+        threads[id] = [item.querySelector('.greeting').textContent];
+        salva();
+      }
+      return threads[id];
+    }
+
+    function disegna(lista) {
+      thread.innerHTML = '';
+      lista.forEach(function (testo) {
+        var bolla = document.createElement('p');
+        bolla.className = 'bubble';
+        bolla.textContent = testo;
+        thread.appendChild(bolla);
+      });
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    function apriConversazione(item) {
+      var id = item.getAttribute('data-user');
+      if (!known[id]) return;
+      currentId = id;
+      var stars = item.querySelector('.stars');
+      var flag = item.querySelector('.flag-icon');
+      var photo = item.querySelector('.mini-photo');
+      document.getElementById('threadName').textContent = item.querySelector('.username').textContent;
+      var threadStars = document.getElementById('threadStars');
+      threadStars.textContent = stars.textContent;
+      threadStars.className = stars.className;
+      var threadFlag = document.getElementById('threadFlag');
+      threadFlag.src = flag.src;
+      threadFlag.alt = flag.alt;
+      document.getElementById('threadPhoto').href = 'album.html?user=' + id + '&from=chat';
+      document.getElementById('threadPhotoImg').src = photo.src;
+      document.getElementById('threadPhoto').setAttribute('aria-label', 'Apri la foto di ' + item.querySelector('.username').textContent);
+      disegna(messaggiDi(item));
+      messageBox.value = '';
+      messageBox.placeholder = 'Scrivi a ' + item.querySelector('.username').textContent + '...';
+      listView.hidden = true;
+      threadView.hidden = false;
+      history.replaceState(null, '', 'chat.html?user=' + id);
+    }
+
+    function tornaAllaLista() {
+      threadView.hidden = true;
+      listView.hidden = false;
+      currentId = '';
+      history.replaceState(null, '', 'chat.html');
+    }
+
+    document.querySelector('.user-list').addEventListener('click', function (event) {
+      var btn = event.target.closest('.open-chat');
+      if (!btn) return;
+      apriConversazione(btn.closest('.user-item'));
+    });
+
+    document.getElementById('backToList').addEventListener('click', tornaAllaLista);
+
+    document.getElementById('composer').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var testo = messageBox.value.trim();
+      if (!testo || !currentId) return;
+      threads[currentId].push(testo);
+      salva();
+      var item = document.querySelector('.user-item[data-user="' + currentId + '"]');
+      item.querySelector('.greeting').textContent = testo;
+      messageBox.value = '';
+      disegna(threads[currentId]);
+    });
+
+    var params = new URLSearchParams(location.search);
+    var user = params.get('user');
+    if (user === 'aiko' || localStorage.getItem('take-that-aiko-chat') === '1') {
+      if (user === 'aiko') localStorage.setItem('take-that-aiko-chat', '1');
+      aggiungiAiko();
+    }
+    document.querySelectorAll('.user-item').forEach(function (item) {
+      var id = item.getAttribute('data-user');
+      if (threads[id] && threads[id].length) {
+        item.querySelector('.greeting').textContent = threads[id][threads[id].length - 1];
+      }
+    });
+    if (user && known[user]) {
+      var item = document.querySelector('.user-item[data-user="' + user + '"]');
+      if (item) apriConversazione(item);
+    }
+  </script>
 </body>
 </html>
