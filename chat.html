@@ -296,7 +296,7 @@
     .btn-send {
       background: #e2d8c3;
       border: 1px solid #555;
-      border-radius: 8px;
+      border-radius: 999px;
       padding: 12px 16px;
       font-size: 16px;
       font-weight: 700;
@@ -309,6 +309,56 @@
 
     .btn-send:active {
       transform: scale(0.96);
+    }
+
+    .keyboard {
+      flex-shrink: 0;
+      margin: 10px -18px -20px;
+      padding: 8px 4px 14px;
+      background: #d1d5dc;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .keyboard[hidden] {
+      display: none;
+    }
+
+    .key-row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .key {
+      flex: 1;
+      height: 34px;
+      border: none;
+      border-radius: 6px;
+      background: #fff;
+      color: #1a1a1a;
+      font: 600 15px/1 'Segoe UI', Tahoma, sans-serif;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.28);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .key:active {
+      background: #eceff3;
+    }
+
+    .key.fn {
+      flex: 1.4;
+      background: #b7bcc6;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .key.space {
+      flex: 5;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -438,6 +488,46 @@
           <textarea class="message-box" id="messageBox" placeholder="Scrivi..." aria-label="Messaggio"></textarea>
           <button class="btn-send" type="submit">INVIA</button>
         </form>
+        <div class="keyboard" id="keyboard" hidden>
+          <div class="key-row">
+            <button type="button" class="key" data-key="q">q</button>
+            <button type="button" class="key" data-key="w">w</button>
+            <button type="button" class="key" data-key="e">e</button>
+            <button type="button" class="key" data-key="r">r</button>
+            <button type="button" class="key" data-key="t">t</button>
+            <button type="button" class="key" data-key="y">y</button>
+            <button type="button" class="key" data-key="u">u</button>
+            <button type="button" class="key" data-key="i">i</button>
+            <button type="button" class="key" data-key="o">o</button>
+            <button type="button" class="key" data-key="p">p</button>
+          </div>
+          <div class="key-row">
+            <button type="button" class="key" data-key="a">a</button>
+            <button type="button" class="key" data-key="s">s</button>
+            <button type="button" class="key" data-key="d">d</button>
+            <button type="button" class="key" data-key="f">f</button>
+            <button type="button" class="key" data-key="g">g</button>
+            <button type="button" class="key" data-key="h">h</button>
+            <button type="button" class="key" data-key="j">j</button>
+            <button type="button" class="key" data-key="k">k</button>
+            <button type="button" class="key" data-key="l">l</button>
+          </div>
+          <div class="key-row">
+            <button type="button" class="key fn" data-key="shift">⇧</button>
+            <button type="button" class="key" data-key="z">z</button>
+            <button type="button" class="key" data-key="x">x</button>
+            <button type="button" class="key" data-key="c">c</button>
+            <button type="button" class="key" data-key="v">v</button>
+            <button type="button" class="key" data-key="b">b</button>
+            <button type="button" class="key" data-key="n">n</button>
+            <button type="button" class="key" data-key="m">m</button>
+            <button type="button" class="key fn" data-key="back">canc</button>
+          </div>
+          <div class="key-row">
+            <button type="button" class="key space" data-key=" ">spazio</button>
+            <button type="button" class="key fn" data-key="enter">invio</button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -526,6 +616,7 @@
     }
 
     function tornaAllaLista() {
+      document.getElementById('keyboard').hidden = true;
       threadView.hidden = true;
       listView.hidden = false;
       currentId = '';
@@ -550,6 +641,68 @@
       item.querySelector('.greeting').textContent = testo;
       messageBox.value = '';
       disegna(threads[currentId]);
+    });
+
+    var keyboard = document.getElementById('keyboard');
+    var maiuscolo = false;
+
+    function scrivi(carattere) {
+      var inizio = messageBox.selectionStart;
+      var fine = messageBox.selectionEnd;
+      var valore = messageBox.value;
+      messageBox.value = valore.slice(0, inizio) + carattere + valore.slice(fine);
+      var pos = inizio + carattere.length;
+      messageBox.setSelectionRange(pos, pos);
+    }
+
+    messageBox.addEventListener('focus', function () {
+      keyboard.hidden = false;
+    });
+
+    document.getElementById('thread').addEventListener('mousedown', function () {
+      keyboard.hidden = true;
+      messageBox.blur();
+    });
+
+    keyboard.addEventListener('mousedown', function (event) {
+      event.preventDefault();
+    });
+
+    keyboard.addEventListener('click', function (event) {
+      var tasto = event.target.closest('.key');
+      if (!tasto) return;
+      var azione = tasto.getAttribute('data-key');
+      if (azione === 'shift') {
+        maiuscolo = !maiuscolo;
+        keyboard.querySelectorAll('.key[data-key]').forEach(function (el) {
+          var lettera = el.getAttribute('data-key');
+          if (lettera.length === 1 && lettera !== ' ') {
+            el.textContent = maiuscolo ? lettera.toUpperCase() : lettera;
+          }
+        });
+        return;
+      }
+      if (azione === 'back') {
+        var inizio = messageBox.selectionStart;
+        var fine = messageBox.selectionEnd;
+        var valore = messageBox.value;
+        if (inizio === fine && inizio > 0) inizio -= 1;
+        messageBox.value = valore.slice(0, inizio) + valore.slice(fine);
+        messageBox.setSelectionRange(inizio, inizio);
+        return;
+      }
+      if (azione === 'enter') {
+        document.getElementById('composer').requestSubmit();
+        return;
+      }
+      scrivi(maiuscolo && azione !== ' ' ? azione.toUpperCase() : azione);
+      if (maiuscolo && azione !== ' ') {
+        maiuscolo = false;
+        keyboard.querySelectorAll('.key[data-key]').forEach(function (el) {
+          var lettera = el.getAttribute('data-key');
+          if (lettera.length === 1 && lettera !== ' ') el.textContent = lettera;
+        });
+      }
     });
 
     var params = new URLSearchParams(location.search);

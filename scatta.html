@@ -148,35 +148,37 @@
         .corner.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
         .corner.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
         .corner.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
-        .cam-badge {
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.45);
-            color: #fff;
-            font-size: 11px;
-            letter-spacing: 1px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            z-index: 2;
-        }
         .shutter-wrap {
             display: flex;
             justify-content: center;
             padding-top: 16px;
         }
         .shutter {
-            width: 74px;
-            height: 74px;
+            width: 78px;
+            height: 78px;
+            padding: 0;
             border-radius: 50%;
-            border: 5px solid #fff;
-            background: radial-gradient(circle at 35% 30%, #90caf9, #1565c0);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+            border: 4px solid #fff;
+            background: transparent;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+            display: grid;
+            place-items: center;
             cursor: pointer;
         }
-        .shutter:active {
-            transform: scale(0.94);
+        .shutter::before {
+            content: '';
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.12s ease, background 0.12s ease;
+        }
+        .shutter:hover::before {
+            background: #f4f7fb;
+        }
+        .shutter:active::before {
+            transform: scale(0.88);
+            background: #e8eef5;
         }
         .polaroid {
             background: #fff;
@@ -186,10 +188,23 @@
             height: 250px;
             margin: 8px auto 14px;
             width: 92%;
+            position: relative;
         }
         .polaroid img {
             height: calc(100% - 0px);
             border-radius: 2px;
+        }
+        .shot-note {
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            bottom: 6px;
+            margin: 0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.2;
         }
         .btn {
             background: linear-gradient(145deg, #2196F3, #0d47a1);
@@ -398,9 +413,7 @@
 
             <!-- 1. Mirino (niente fotocamera vera) -->
             <div class="step active" id="step-camera">
-                <p class="hint">Solo tasto otturatore. Niente galleria, niente incolla.</p>
                 <div class="viewfinder" id="viewfinder">
-                    <span class="cam-badge">LIVE · SOLO TELECAMERA</span>
                     <span class="corner tl"></span>
                     <span class="corner tr"></span>
                     <span class="corner bl"></span>
@@ -472,6 +485,7 @@
                 <p class="hint">Lo scatto di Aiko_22. La tua resta sul telefono, la sua va nell’album.</p>
                 <div class="polaroid">
                     <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80" alt="Foto di Aiko_22">
+                    <p class="shot-note">Tokyo · 20 ott 2026, 21:14</p>
                 </div>
                 <div class="partner" style="margin-top:0;">
                     <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
