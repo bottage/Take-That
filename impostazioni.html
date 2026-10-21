@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social App - Impostazioni</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .phone-frame {
+            width: 360px;
+            height: 680px;
+            background: #111;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 4px solid #333;
+            position: relative;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #2274C0;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 16px 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 18px;
+        }
+        .back-btn {
+            position: absolute;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1565C0;
+            text-decoration: none;
+            background: #fff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+        }
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+            margin-left: -2px;
+        }
+        .back-btn:hover { background: #f3f8ff; }
+        .back-btn:active { transform: scale(0.94); }
+        .title {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            line-height: 1;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .nota {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 16px;
+            padding: 16px;
+            color: #333;
+            font-size: 15px;
+            line-height: 1.4;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+        .nota a {
+            color: #1565C0;
+            font-weight: 800;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="header">
+                <a href="index.html" class="back-btn" aria-label="Indietro">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <h1 class="title">IMPOSTAZIONI</h1>
+            </div>
+            <p class="nota">Account e avvisi stanno qui. Il tuo rating e gli scambi sono nel <a href="profilo.html">profilo</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

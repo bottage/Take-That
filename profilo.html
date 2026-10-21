@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social App - Profilo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .phone-frame {
+            width: 360px;
+            height: 680px;
+            background: #111;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 4px solid #333;
+            position: relative;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #2274C0;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 16px 16px;
+            position: relative;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .screen::-webkit-scrollbar { display: none; }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+        .back-btn {
+            position: absolute;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1565C0;
+            text-decoration: none;
+            background: #fff;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+        }
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+            margin-left: -2px;
+        }
+        .back-btn:hover { background: #f3f8ff; }
+        .back-btn:active { transform: scale(0.94); }
+        .title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            line-height: 1;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+        }
+        .identita {
+            background: #fff;
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+        .flag {
+            width: 42px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        }
+        .nome {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            line-height: 1.1;
+        }
+        .paese {
+            margin-top: 2px;
+            font-size: 13px;
+            color: #555;
+        }
+        .tue-stelle {
+            margin-top: 4px;
+            color: #2f9a1f;
+            letter-spacing: 1px;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .conti {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .conto {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 14px;
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+        }
+        .conto b {
+            display: block;
+            color: #1565C0;
+            font-size: 26px;
+            line-height: 1;
+        }
+        .conto span {
+            display: block;
+            margin-top: 4px;
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+        .elenco-titolo {
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 2px 2px 4px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+        }
+        .elenco-nota {
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 11px;
+            line-height: 1.35;
+            margin: 0 2px 10px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .scambio {
+            background: #fff;
+            border-radius: 14px;
+            padding: 8px 10px 8px 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: inherit;
+        }
+        .scambio.in-evidenza {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+        .ricordo {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            background: #d5dde6;
+        }
+        .ricordo img {
+            width: 116%;
+            height: 116%;
+            margin: -8%;
+            object-fit: cover;
+            object-position: center;
+            filter: blur(2px) saturate(0.86) brightness(1.06);
+            display: block;
+        }
+        .ricordo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.28);
+        }
+        .meta {
+            flex: 1;
+            min-width: 0;
+        }
+        .chi {
+            display: block;
+            margin-top: 3px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #111;
+            line-height: 1.15;
+            text-decoration: none;
+        }
+        .chi .da {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+        .chi:active { opacity: 0.72; }
+        .quando {
+            margin-top: 1px;
+            font-size: 12px;
+            color: #555;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ricevute {
+            display: block;
+            color: #e6b325;
+            letter-spacing: 1px;
+            font-size: 13px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="header">
+                <a href="index.html" class="back-btn" aria-label="Indietro">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <h1 class="title">PROFILO</h1>
+            </div>
+
+            <div class="identita">
+                <img class="flag" src="https://flagcdn.com/w80/it.png" alt="Italia">
+                <div>
+                    <div class="nome">Teo_04</div>
+                    <div class="paese">Italia</div>
+                    <div class="tue-stelle" id="tueStelle" aria-label="Il tuo rating"></div>
+                </div>
+            </div>
+
+            <div class="conti">
+                <div class="conto">
+                    <b id="numeroScambi">0</b>
+                    <span>scambi</span>
+                </div>
+                <div class="conto">
+                    <b id="media">0</b>
+                    <span>media stelle</span>
+                </div>
+            </div>
+
+            <p class="elenco-titolo">STELLE RICEVUTE</p>
+            <p class="elenco-nota">Il riquadro è lo scatto che hai inviato.</p>
+            <div id="elenco"></div>
+        </div>
+    </div>
+    <script>
+        var scambi = [
+            { user: 'aiko', chi: 'Aiko_22', luogo: 'Giardino, Verona', quando: '20 ott, 21:14', stelle: 5, ricordo: 'photo-1585320806297-9794b3e4eeae', fuoco: 'center' },
+            { user: 'rick', chi: 'Rick34', luogo: 'Cucina, Verona', quando: '12 ott, 22:40', stelle: 4, ricordo: 'photo-1556911220-bff31c812dba', fuoco: 'center' },
+            { user: 'alex', chi: 'Alex12', luogo: 'In macchina, Verona', quando: '3 ott, 23:05', stelle: 3, ricordo: 'photo-1449965408869-eaa3f722e40d', fuoco: 'center 42%' },
+            { user: 'pippo', chi: 'Pippo3', luogo: 'Salotto, Verona', quando: '28 set, 16:20', stelle: 5, ricordo: 'photo-1493809842364-78817add7ffb', fuoco: 'center' },
+            { user: 'edu', chi: 'Edu_78', luogo: 'Camera, Verona', quando: '19 set, 09:12', stelle: 4, ricordo: 'photo-1522771739844-6a9f6d5f14af', fuoco: 'center' },
+            { user: 'tod', chi: 'Tod_3', luogo: 'A tavola, Verona', quando: '4 set, 15:48', stelle: 4, ricordo: 'photo-1473093295043-cdd812d0e601', fuoco: 'center' },
+            { user: 'liu', chi: 'Liu09', luogo: 'Al bar, Verona', quando: '18 ago, 11:30', stelle: 2, ricordo: 'photo-1495474472287-4d71bcdd2085', fuoco: 'center' }
+        ];
+
+        function stelle(n) {
+            var testo = '';
+            var i;
+            for (i = 1; i <= 5; i++) testo += i <= n ? '★' : '☆';
+            return testo;
+        }
+
+        var somma = scambi.reduce(function (tot, voce) { return tot + voce.stelle; }, 0);
+        var media = somma / scambi.length;
+        var intere = Math.round(media);
+
+        document.getElementById('numeroScambi').textContent = String(scambi.length);
+        document.getElementById('media').textContent = media.toFixed(1).replace('.', ',');
+        document.getElementById('tueStelle').textContent = stelle(intere);
+
+        var elenco = document.getElementById('elenco');
+        var parametri = new URLSearchParams(location.search);
+        var ricordoRichiesto = parametri.get('ricordo');
+
+        if (parametri.get('from') === 'album' && ricordoRichiesto && /^[a-z]+$/.test(ricordoRichiesto)) {
+            document.querySelector('.header .back-btn').href = 'album.html?user=' + encodeURIComponent(ricordoRichiesto);
+        }
+
+        scambi.forEach(function (voce) {
+            var riga = document.createElement('div');
+            riga.className = 'scambio';
+            riga.id = 'ricordo-' + voce.user;
+
+            var memoria = document.createElement('div');
+            memoria.className = 'ricordo';
+            memoria.innerHTML = '<img alt="" draggable="false">';
+            var anteprima = memoria.querySelector('img');
+            anteprima.src = 'https://images.unsplash.com/' + voce.ricordo + '?w=240&q=60';
+            anteprima.style.objectPosition = voce.fuoco;
+
+            var meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.innerHTML = '<div class="ricevute"></div><a class="chi"></a><div class="quando"></div>';
+            var link = meta.querySelector('.chi');
+            link.href = 'album.html?user=' + voce.user + '&from=profilo';
+            link.setAttribute('aria-label', 'Apri la foto ricevuta da ' + voce.chi);
+            link.innerHTML = '<span class="da">da</span> ' + voce.chi;
+            meta.querySelector('.ricevute').textContent = stelle(voce.stelle);
+            meta.querySelector('.ricevute').setAttribute('aria-label', 'Valutazione di ' + voce.chi);
+            meta.querySelector('.quando').textContent = 'Verona · ' + voce.quando;
+
+            riga.appendChild(memoria);
+            riga.appendChild(meta);
+            elenco.appendChild(riga);
+        });
+
+        if (ricordoRichiesto && /^[a-z]+$/.test(ricordoRichiesto)) {
+            var trovato = document.getElementById('ricordo-' + ricordoRichiesto);
+            if (trovato) {
+                trovato.classList.add('in-evidenza');
+                trovato.scrollIntoView({ block: 'center' });
+            }
+        }
+    </script>
+</body>
+</html>

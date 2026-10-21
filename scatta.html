@@ -209,8 +209,10 @@
             border-radius: 28px;
             overflow: hidden;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            padding-top: 80px;
         }
         .viewer[hidden] {
             display: none;
@@ -218,11 +220,14 @@
         .viewer-frame {
             display: flex;
             flex-direction: column;
-            max-width: 100%;
+            width: 100%;
+            flex-shrink: 0;
         }
         .viewer-photo {
             width: 100%;
+            aspect-ratio: 4 / 3;
             height: auto;
+            object-fit: cover;
             display: block;
         }
         .viewer .back-btn {
@@ -232,20 +237,59 @@
             z-index: 2;
         }
         .viewer-caption {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 2;
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 18px 16px 20px;
+        }
+        .viewer .voto-domanda {
+            margin: 0;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: left;
+        }
+        .viewer .voto-avviso {
+            margin: 6px 0 12px;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-align: left;
+        }
+        .viewer .voto {
+            justify-content: flex-start;
+        }
+        .viewer .voto button {
+            width: 36px;
+            height: 36px;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 26px;
+        }
+        .viewer .voto button.accesa { color: #f6c51e; }
+        .voto-fisso {
+            margin-top: 4px;
+            font-size: 22px;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+        .voto-fisso .piene { color: #e6b325; }
+        .voto-fisso .vuote { color: #d5dde6; }
+        .viewer .voto-fisso .piene { color: #f6c51e; }
+        .viewer .voto-fisso .vuote { color: rgba(255, 255, 255, 0.28); }
+        .viewer-persona {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 28px 16px 18px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.16);
         }
         .viewer-place {
-            margin: 8px 0 0;
-            text-align: center;
+            margin: 8px 16px 0;
+            text-align: left;
             color: #fff;
             font-size: 13px;
             font-weight: 600;
@@ -300,21 +344,23 @@
         }
         .viewer-chat {
             flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             background: #fff;
             color: #1565C0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 20px;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
         }
-        .viewer-chat:hover {
-            background: #f3f8ff;
+        .viewer-chat svg {
+            width: 18px;
+            height: 18px;
+            display: block;
         }
-        .viewer-chat:active {
-            transform: scale(0.96);
-        }
+        .viewer-chat:active { transform: scale(0.94); }
         .polaroid img {
             height: calc(100% - 0px);
             border-radius: 2px;
@@ -452,6 +498,25 @@
             gap: 12px;
             box-shadow: 0 8px 18px rgba(0,0,0,0.25);
             margin: 12px 0 16px;
+        }
+        #step-done {
+            justify-content: space-evenly;
+        }
+        #step-done .polaroid {
+            flex: 0 0 auto;
+            width: 100%;
+            height: auto;
+            margin: 0;
+        }
+        #step-done .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+        }
+        #step-done .giudizio,
+        #step-done .partner {
+            margin: 0;
+            flex-shrink: 0;
         }
         .wait-dots {
             display: flex;
@@ -643,10 +708,16 @@
                     <p class="shot-note">Tokyo · 20 ott 2026, 21:14</p>
                 </button>
                 <div class="giudizio">
-                    <p>Com’è questo scatto?</p>
-                    <div class="voto" id="voto" role="group" aria-label="Giudizio sullo scatto"></div>
+                    <div id="votoAperto">
+                        <p>Com’è questo scatto?</p>
+                        <div class="voto" id="voto" role="group" aria-label="Giudizio sullo scatto"></div>
+                    </div>
+                    <div id="votoDato" hidden>
+                        <p>Il tuo voto</p>
+                        <div class="voto-fisso" id="votoFisso"></div>
+                    </div>
                 </div>
-                <div class="partner" style="margin-top:0;">
+                <div class="partner">
                     <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
                     <div>
                         <div class="username">Aiko_22</div>
@@ -654,7 +725,6 @@
                         <div class="sub" style="color:#333;text-align:left;margin:0;">Giappone · Tokyo</div>
                     </div>
                 </div>
-                <a class="btn" href="album.html" style="text-decoration:none;display:block;text-align:center;">VAI ALL’ALBUM</a>
             </div>
         </div>
         <div class="viewer" id="viewer" hidden>
@@ -668,16 +738,31 @@
                 <p class="viewer-place">Tokyo · 20 ottobre, 21:14</p>
             </div>
             <div class="viewer-caption">
-                <div class="viewer-sender">
-                    <div class="sender">
-                        <img class="flag" src="https://flagcdn.com/w40/jp.png" alt="">
-                        <div class="sender-meta">
-                            <span class="name">Aiko_22</span>
-                            <span class="origin-row"><span class="origin">Giappone</span><span class="stars">★★★★</span></span>
+                <div id="votoApertoGrande">
+                    <p class="voto-domanda">Com’è questo scatto?</p>
+                    <p class="voto-avviso">Attenzione: puoi votarlo solo una volta. Se vuoi, guardalo e decidi più tardi.</p>
+                    <div class="voto" id="votoGrande" role="group" aria-label="Giudizio sullo scatto"></div>
+                </div>
+                <div id="votoDatoGrande" hidden>
+                    <p class="voto-domanda">Il tuo voto</p>
+                    <div class="voto-fisso" id="votoFissoGrande"></div>
+                </div>
+                <div class="viewer-persona">
+                    <div class="viewer-sender">
+                        <div class="sender">
+                            <img class="flag" src="https://flagcdn.com/w40/jp.png" alt="">
+                            <div class="sender-meta">
+                                <span class="name">Aiko_22</span>
+                                <span class="origin-row"><span class="origin">Giappone</span><span class="stars">★★★★</span></span>
+                            </div>
                         </div>
                     </div>
+                    <a class="viewer-chat" href="chat.html?user=aiko" aria-label="Chat">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 6.5h14v8.2H8.2L5 17.5V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
                 </div>
-                <a class="viewer-chat" href="chat.html?user=aiko">Chat</a>
             </div>
         </div>
     </div>
@@ -696,13 +781,11 @@
         const viewerPhoto = document.getElementById('viewerPhoto');
 
         function posizionaDidascalia() {
-            if (!viewerPhoto.naturalWidth) return;
-            var spazio = viewer.clientHeight - 168;
-            var scala = Math.min(viewer.clientWidth / viewerPhoto.naturalWidth, spazio / viewerPhoto.naturalHeight);
-            document.getElementById('viewerFrame').style.width = Math.round(viewerPhoto.naturalWidth * scala) + 'px';
+            document.getElementById('viewerFrame').style.width = '100%';
         }
 
         function apriFotoRicevuta() {
+            mostraVoto(votoDi(FOTO_RICEVUTA));
             viewer.hidden = false;
             if (viewerPhoto.complete) posizionaDidascalia();
         }
@@ -767,31 +850,50 @@
             localStorage.setItem('takethat-voti', JSON.stringify(tutti));
         }
 
-        function disegnaVoto(box, n) {
-            box.querySelectorAll('button').forEach(function (btn) {
-                var accesa = Number(btn.getAttribute('data-n')) <= n;
-                btn.classList.toggle('accesa', accesa);
-                btn.setAttribute('aria-pressed', accesa ? 'true' : 'false');
+        function scriviStelle(el, n) {
+            var piene = '';
+            var vuote = '';
+            var i;
+            for (i = 1; i <= 5; i++) {
+                if (i <= n) piene += '★';
+                else vuote += '★';
+            }
+            el.innerHTML = '<span class="piene">' + piene + '</span><span class="vuote">' + vuote + '</span>';
+            el.setAttribute('aria-label', n === 1 ? '1 stella, voto già dato' : n + ' stelle, voto già dato');
+        }
+
+        function mostraVoto(n) {
+            var dato = n >= 1;
+            document.getElementById('votoAperto').hidden = dato;
+            document.getElementById('votoDato').hidden = !dato;
+            document.getElementById('votoApertoGrande').hidden = dato;
+            document.getElementById('votoDatoGrande').hidden = !dato;
+            if (!dato) return;
+            scriviStelle(document.getElementById('votoFisso'), n);
+            scriviStelle(document.getElementById('votoFissoGrande'), n);
+        }
+
+        function preparaVoto(box) {
+            var n;
+            for (n = 1; n <= 5; n++) {
+                var stella = document.createElement('button');
+                stella.type = 'button';
+                stella.setAttribute('data-n', String(n));
+                stella.setAttribute('aria-label', n === 1 ? '1 stella' : n + ' stelle');
+                stella.textContent = '★';
+                box.appendChild(stella);
+            }
+            box.addEventListener('click', function (event) {
+                var btn = event.target.closest('button');
+                if (!btn || votoDi(FOTO_RICEVUTA)) return;
+                salvaVoto(FOTO_RICEVUTA, Number(btn.getAttribute('data-n')));
+                mostraVoto(votoDi(FOTO_RICEVUTA));
             });
         }
 
-        var votoBox = document.getElementById('voto');
-        for (var n = 1; n <= 5; n++) {
-            var stella = document.createElement('button');
-            stella.type = 'button';
-            stella.setAttribute('data-n', String(n));
-            stella.setAttribute('aria-label', n === 1 ? '1 stella' : n + ' stelle');
-            stella.textContent = '★';
-            votoBox.appendChild(stella);
-        }
-        disegnaVoto(votoBox, votoDi(FOTO_RICEVUTA));
-        votoBox.addEventListener('click', function (event) {
-            var btn = event.target.closest('button');
-            if (!btn) return;
-            var scelto = Number(btn.getAttribute('data-n'));
-            salvaVoto(FOTO_RICEVUTA, scelto);
-            disegnaVoto(votoBox, scelto);
-        });
+        preparaVoto(document.getElementById('voto'));
+        preparaVoto(document.getElementById('votoGrande'));
+        mostraVoto(votoDi(FOTO_RICEVUTA));
 
         document.getElementById('receivedShot').addEventListener('click', apriFotoRicevuta);
         document.getElementById('viewerClose').addEventListener('click', chiudiFoto);

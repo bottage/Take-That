@@ -81,47 +81,93 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
         .menu-container {
-            gap: 15px;
-            width: 80%;
+            gap: 12px;
+            width: 86%;
         }
         .menu-btn {
-            background: #fff;
-            color: #1565C0;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             width: 100%;
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
-            cursor: pointer;
-            transition: background 0.2s, transform 0.12s, color 0.2s;
-            text-align: center;
+            padding: 13px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.42);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.6px;
+            text-decoration: none;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 18px rgba(8, 40, 80, 0.16);
+        }
+        .menu-btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
         .menu-btn:hover {
-            background: #f3f8ff;
-            color: #0d47a1;
+            background: rgba(255, 255, 255, 0.28);
         }
         .menu-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.98);
         }
         .bottom-element {
             min-height: 148px;
         }
+        .impostazioni {
+            position: absolute;
+            bottom: 18px;
+            left: 16px;
+            z-index: 3;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.42);
+            color: #fff;
+            backdrop-filter: blur(10px);
+            display: grid;
+            place-items: center;
+        }
+        .impostazioni svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+        }
+        .impostazioni:active { transform: scale(0.94); }
     </style>
 </head>
 <body>
     <div class="phone-frame">
         <div class="screen">
+            <a href="impostazioni.html" class="impostazioni" aria-label="Impostazioni">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" d="M10.1 2h3.8l.5 2.4c.6.2 1.2.5 1.7.9l2.2-1.1 2.7 2.7-1.1 2.2c.4.5.7 1.1.9 1.7l2.4.5v3.8l-2.4.5a7 7 0 0 1-.9 1.7l1.1 2.2-2.7 2.7-2.2-1.1a7 7 0 0 1-1.7.9l-.5 2.4h-3.8l-.5-2.4a7 7 0 0 1-1.7-.9L6 21.3 3.3 18.6l1.1-2.2a7 7 0 0 1-.9-1.7L1.1 14.2V10.4l2.4-.5c.2-.6.5-1.2.9-1.7L3.3 6 6 3.3l2.2 1.1c.5-.4 1.1-.7 1.7-.9L10.1 2zm1.9 6.2a3.8 3.8 0 1 0 .01 7.61A3.8 3.8 0 0 0 12 8.2z"/>
+                </svg>
+            </a>
             <div class="top-logo">
                 <a href="scatta.html" class="btn-scatta" style="text-decoration: none; display: inline-block;">SCATTA</a>
             </div>
             <div class="menu-container">
-                <a href="album.html" class="menu-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">ALBUM</a>
-                <a href="chat.html" class="menu-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">CHAT</a>
-                <a href="mappa.html" class="menu-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">MAPPA</a>
-                <button class="menu-btn">IMPOSTAZIONI</button>
+                <a href="album.html" class="menu-btn">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.7"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.7"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6" stroke="currentColor" stroke-width="1.7"/></svg>
+                    ALBUM
+                </a>
+                <a href="chat.html" class="menu-btn">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 6.5h14a1 1 0 0 1 1 1V15a1 1 0 0 1-1 1H9l-4 3v-3H5a1 1 0 0 1-1-1V7.5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                    CHAT
+                </a>
+                <a href="mappa.html" class="menu-btn">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="11" r="2" stroke="currentColor" stroke-width="1.7"/></svg>
+                    MAPPA
+                </a>
+                <a href="profilo.html" class="menu-btn">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M6 19.2c.8-2.8 3-4.2 6-4.2s5.2 1.4 6 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    PROFILO
+                </a>
             </div>
             <div class="bottom-element"></div>
         </div>
