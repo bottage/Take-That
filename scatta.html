@@ -229,6 +229,16 @@
             height: auto;
             object-fit: cover;
             display: block;
+            cursor: pointer;
+        }
+        .viewer.solo {
+            justify-content: center;
+            padding-top: 0;
+        }
+        .viewer.solo .viewer-caption,
+        .viewer.solo .viewer-place,
+        .viewer.solo .back-btn {
+            display: none;
         }
         .viewer .back-btn {
             position: absolute;
@@ -483,6 +493,13 @@
             text-align: center;
             text-shadow: 0 2px 6px rgba(0,0,0,0.45);
         }
+        #step-incoming .status {
+            max-width: 250px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1.28;
+        }
         .sub {
             color: rgba(255,255,255,0.9);
             font-size: 13px;
@@ -513,10 +530,72 @@
             height: auto;
             aspect-ratio: 4 / 3;
         }
-        #step-done .giudizio,
         #step-done .partner {
             margin: 0;
             flex-shrink: 0;
+        }
+        .arrivo-flash {
+            position: absolute;
+            inset: 0;
+            z-index: 8;
+            border-radius: inherit;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .arrivo-flash.attivo {
+            animation: arrivo-flash 0.55s ease-out both;
+        }
+        #step-done.arrivo .polaroid {
+            position: relative;
+            z-index: 3;
+            animation: arrivo-foto 1.45s cubic-bezier(0.22, 0.8, 0.28, 1) both;
+        }
+        #step-done.arrivo .partner {
+            animation: arrivo-resto 0.55s cubic-bezier(0.22, 0.8, 0.3, 1) 0.98s both;
+        }
+        @keyframes arrivo-flash {
+            0% { opacity: 0.96; }
+            28% { opacity: 0.42; }
+            100% { opacity: 0; }
+        }
+        @keyframes arrivo-foto {
+            0% {
+                opacity: 0;
+                transform: translateY(var(--arrivo-y, 100px)) scale(1.045);
+                filter: brightness(1.7) saturate(0.72);
+                box-shadow: 0 22px 46px rgba(0, 0, 0, 0.22);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(var(--arrivo-y, 100px)) scale(1.02);
+                filter: brightness(1.14) saturate(0.9);
+                box-shadow: 0 20px 42px rgba(0, 0, 0, 0.26);
+            }
+            58% {
+                opacity: 1;
+                transform: translateY(var(--arrivo-y, 100px)) scale(1);
+                filter: none;
+                box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+            }
+        }
+        @keyframes arrivo-resto {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .arrivo-flash.attivo,
+            #step-done.arrivo .polaroid,
+            #step-done.arrivo .giudizio,
+            #step-done.arrivo .partner {
+                animation: none;
+            }
         }
         .wait-dots {
             display: flex;
@@ -697,7 +776,18 @@
                             <div class="sub" style="color:#333;text-align:left;margin:0;">Scatto ricevuto</div>
                         </div>
                     </div>
-                    <button class="btn" type="button" onclick="mostra('done')" style="margin-top:0;">APRI LO SCATTO</button>
+                    <button class="btn" type="button" onclick="mostra('incoming')" style="margin-top:0;">APRI LO SCATTO</button>
+                </div>
+            </div>
+
+            <div class="step" id="step-incoming">
+                <div class="radar">
+                    <div class="rings">
+                        <span></span><span></span><span></span>
+                        <div class="core">✈</div>
+                    </div>
+                    <div class="status">Sta arrivando<br>la tua foto</div>
+                    <div class="sub">Da Aiko_22</div>
                 </div>
             </div>
 
@@ -707,16 +797,10 @@
                     <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80" alt="Foto di Aiko_22">
                     <p class="shot-note">Tokyo · 20 ott 2026, 21:14</p>
                 </button>
-                <div class="giudizio">
-                    <div id="votoAperto">
-                        <p>Com’è questo scatto?</p>
-                        <div class="voto" id="voto" role="group" aria-label="Giudizio sullo scatto"></div>
-                    </div>
-                    <div id="votoDato" hidden>
-                        <p>Il tuo voto</p>
-                        <div class="voto-fisso" id="votoFisso"></div>
-                    </div>
-                </div>
+                <!-- Scheda voto messa da parte (21 ott 2026), da rimettere tra la foto e Aiko se serve.
+                     Card bianca .giudizio: «Com’è questo scatto?», cinque stelle #voto,
+                     e dopo il voto «Il tuo voto» con #votoFisso. Senza la frase di avviso.
+                     Il giudizio resta nella foto aperta. -->
                 <div class="partner">
                     <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
                     <div>
@@ -726,6 +810,7 @@
                     </div>
                 </div>
             </div>
+            <div class="arrivo-flash" id="arrivoFlash" aria-hidden="true"></div>
         </div>
         <div class="viewer" id="viewer" hidden>
             <button type="button" class="back-btn" id="viewerClose" aria-label="Chiudi">
@@ -774,6 +859,7 @@
             wait: 'IN ATTESA',
             match: 'ATTESA',
             notice: 'RICEVUTO',
+            incoming: 'IN ARRIVO',
             done: 'SCATTO'
         };
         let waitTimers = [];
@@ -785,12 +871,14 @@
         }
 
         function apriFotoRicevuta() {
+            viewer.classList.remove('solo');
             mostraVoto(votoDi(FOTO_RICEVUTA));
             viewer.hidden = false;
             if (viewerPhoto.complete) posizionaDidascalia();
         }
 
         function chiudiFoto() {
+            viewer.classList.remove('solo');
             viewer.hidden = true;
         }
 
@@ -803,6 +891,28 @@
             });
             document.getElementById('pageTitle').textContent = titles[name];
             if (name === 'wait') avviaAttesa();
+            if (name === 'incoming') {
+                waitTimers.push(setTimeout(function () { mostra('done'); }, 2200));
+            }
+            if (name === 'done') avviaArrivo();
+            else {
+                document.getElementById('step-done').classList.remove('arrivo');
+                document.getElementById('arrivoFlash').classList.remove('attivo');
+            }
+        }
+
+        function avviaArrivo() {
+            var step = document.getElementById('step-done');
+            var foto = document.getElementById('receivedShot');
+            var flash = document.getElementById('arrivoFlash');
+            step.classList.remove('arrivo');
+            flash.classList.remove('attivo');
+            void step.offsetWidth;
+            var meta = (step.clientHeight - foto.offsetHeight) / 2;
+            var spostamento = Math.max(0, Math.round(meta - foto.offsetTop));
+            step.style.setProperty('--arrivo-y', spostamento + 'px');
+            step.classList.add('arrivo');
+            flash.classList.add('attivo');
         }
 
         function scatta() {
@@ -864,12 +974,9 @@
 
         function mostraVoto(n) {
             var dato = n >= 1;
-            document.getElementById('votoAperto').hidden = dato;
-            document.getElementById('votoDato').hidden = !dato;
             document.getElementById('votoApertoGrande').hidden = dato;
             document.getElementById('votoDatoGrande').hidden = !dato;
             if (!dato) return;
-            scriviStelle(document.getElementById('votoFisso'), n);
             scriviStelle(document.getElementById('votoFissoGrande'), n);
         }
 
@@ -891,15 +998,27 @@
             });
         }
 
-        preparaVoto(document.getElementById('voto'));
         preparaVoto(document.getElementById('votoGrande'));
         mostraVoto(votoDi(FOTO_RICEVUTA));
 
         document.getElementById('receivedShot').addEventListener('click', apriFotoRicevuta);
         document.getElementById('viewerClose').addEventListener('click', chiudiFoto);
+        viewer.addEventListener('click', function (event) {
+            if (viewer.hidden) return;
+            if (viewer.classList.contains('solo')) {
+                viewer.classList.remove('solo');
+                return;
+            }
+            if (event.target.closest('.viewer-photo')) viewer.classList.add('solo');
+        });
         viewerPhoto.addEventListener('load', posizionaDidascalia);
         document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && !viewer.hidden) chiudiFoto();
+            if (event.key !== 'Escape' || viewer.hidden) return;
+            if (viewer.classList.contains('solo')) {
+                viewer.classList.remove('solo');
+                return;
+            }
+            chiudiFoto();
         });
     </script>
 </body>
