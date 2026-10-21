@@ -331,6 +331,38 @@
             color: #333;
             line-height: 1.2;
         }
+        .giudizio {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 16px;
+            padding: 10px 12px 8px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+        }
+        .giudizio p {
+            margin: 0 0 2px;
+            color: #1565C0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .voto {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+        }
+        .voto button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: none;
+            padding: 0;
+            color: #d5dde6;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .voto button.accesa { color: #e6b325; }
+        .voto button:active { transform: scale(0.9); }
         .btn {
             background: linear-gradient(145deg, #2196F3, #0d47a1);
             color: white;
@@ -610,6 +642,10 @@
                     <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=800&q=80" alt="Foto di Aiko_22">
                     <p class="shot-note">Tokyo · 20 ott 2026, 21:14</p>
                 </button>
+                <div class="giudizio">
+                    <p>Com’è questo scatto?</p>
+                    <div class="voto" id="voto" role="group" aria-label="Giudizio sullo scatto"></div>
+                </div>
                 <div class="partner" style="margin-top:0;">
                     <img class="flag-icon" src="https://flagcdn.com/w40/jp.png" alt="Giappone">
                     <div>
@@ -712,6 +748,50 @@
                 waitTimers.push(setTimeout(function () { mostra('notice'); }, 4500));
             }, 3800));
         }
+
+        var FOTO_RICEVUTA = 'aiko';
+
+        function leggiVoti() {
+            try { return JSON.parse(localStorage.getItem('takethat-voti') || '{}'); }
+            catch (e) { return {}; }
+        }
+
+        function votoDi(user) {
+            var n = Number(leggiVoti()[user]);
+            return n >= 1 && n <= 5 ? n : 0;
+        }
+
+        function salvaVoto(user, n) {
+            var tutti = leggiVoti();
+            tutti[user] = n;
+            localStorage.setItem('takethat-voti', JSON.stringify(tutti));
+        }
+
+        function disegnaVoto(box, n) {
+            box.querySelectorAll('button').forEach(function (btn) {
+                var accesa = Number(btn.getAttribute('data-n')) <= n;
+                btn.classList.toggle('accesa', accesa);
+                btn.setAttribute('aria-pressed', accesa ? 'true' : 'false');
+            });
+        }
+
+        var votoBox = document.getElementById('voto');
+        for (var n = 1; n <= 5; n++) {
+            var stella = document.createElement('button');
+            stella.type = 'button';
+            stella.setAttribute('data-n', String(n));
+            stella.setAttribute('aria-label', n === 1 ? '1 stella' : n + ' stelle');
+            stella.textContent = '★';
+            votoBox.appendChild(stella);
+        }
+        disegnaVoto(votoBox, votoDi(FOTO_RICEVUTA));
+        votoBox.addEventListener('click', function (event) {
+            var btn = event.target.closest('button');
+            if (!btn) return;
+            var scelto = Number(btn.getAttribute('data-n'));
+            salvaVoto(FOTO_RICEVUTA, scelto);
+            disegnaVoto(votoBox, scelto);
+        });
 
         document.getElementById('receivedShot').addEventListener('click', apriFotoRicevuta);
         document.getElementById('viewerClose').addEventListener('click', chiudiFoto);

@@ -164,11 +164,41 @@
             bottom: 0;
             z-index: 2;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             gap: 8px;
             padding: 28px 16px 18px;
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
         }
+        .voto-foto {
+            flex: 1 0 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .voto-foto p {
+            margin: 0;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+        }
+        .voto { display: flex; gap: 0; }
+        .voto button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            padding: 0;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .voto button.accesa { color: #f6c51e; }
+        .voto button:active { transform: scale(0.9); }
         .viewer-place {
             margin: 8px 0 0;
             text-align: center;
@@ -419,6 +449,10 @@
                 <p class="viewer-place" id="viewerPlace"></p>
             </div>
             <div class="viewer-caption">
+                <div class="voto-foto">
+                    <p>Com’è questo scatto?</p>
+                    <div class="voto" id="voto" role="group" aria-label="Giudizio sullo scatto"></div>
+                </div>
                 <div class="viewer-sender" id="viewerSender"></div>
                 <a class="viewer-chat" id="viewerChat" href="chat.html">Chat</a>
             </div>
@@ -435,7 +469,7 @@
 
         function posizionaDidascalia() {
             if (!viewerPhoto.naturalWidth) return;
-            var spazio = viewer.clientHeight - 168;
+            var spazio = viewer.clientHeight - 208;
             var scala = Math.min(viewer.clientWidth / viewerPhoto.naturalWidth, spazio / viewerPhoto.naturalHeight);
             document.getElementById('viewerFrame').style.width = Math.round(viewerPhoto.naturalWidth * scala) + 'px';
         }
@@ -453,10 +487,54 @@
             return luogo + ' · ' + giorno[0] + ' ' + mese + ', ' + pezzi[1].trim();
         }
 
+        function leggiVoti() {
+            try { return JSON.parse(localStorage.getItem('takethat-voti') || '{}'); }
+            catch (e) { return {}; }
+        }
+
+        function votoDi(user) {
+            var n = Number(leggiVoti()[user]);
+            return n >= 1 && n <= 5 ? n : 0;
+        }
+
+        function salvaVoto(user, n) {
+            var tutti = leggiVoti();
+            tutti[user] = n;
+            localStorage.setItem('takethat-voti', JSON.stringify(tutti));
+        }
+
+        function disegnaVoto(n) {
+            votoBox.querySelectorAll('button').forEach(function (btn) {
+                var accesa = Number(btn.getAttribute('data-n')) <= n;
+                btn.classList.toggle('accesa', accesa);
+                btn.setAttribute('aria-pressed', accesa ? 'true' : 'false');
+            });
+        }
+
+        var votoBox = document.getElementById('voto');
+        var votoUtente = '';
+        for (var n = 1; n <= 5; n++) {
+            var stella = document.createElement('button');
+            stella.type = 'button';
+            stella.setAttribute('data-n', String(n));
+            stella.setAttribute('aria-label', n === 1 ? '1 stella' : n + ' stelle');
+            stella.textContent = '★';
+            votoBox.appendChild(stella);
+        }
+        votoBox.addEventListener('click', function (event) {
+            var btn = event.target.closest('button');
+            if (!btn || !votoUtente) return;
+            var scelto = Number(btn.getAttribute('data-n'));
+            salvaVoto(votoUtente, scelto);
+            disegnaVoto(scelto);
+        });
+
         function apriFoto(card) {
             var img = card.querySelector('.photo');
             var sender = card.querySelector('.sender');
             var user = card.getAttribute('data-user');
+            votoUtente = user;
+            disegnaVoto(votoDi(user));
             var copia = sender.cloneNode(true);
             copia.querySelectorAll('.shot, .shot-time').forEach(function (el) { el.remove(); });
             viewerPhoto.src = img.src.replace('w=400', 'w=1200');
