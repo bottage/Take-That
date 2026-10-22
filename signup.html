@@ -210,9 +210,9 @@
             </form>
 
             <p class="oppure">oppure</p>
-            <button class="social" type="button">Continua con Google</button>
-            <button class="social" type="button">Continua con Apple</button>
-            <p class="accedi">Hai già un account? <a href="login.html">Accedi</a></p>
+            <button class="social" id="google" type="button">Continua con Google</button>
+            <button class="social" id="apple" type="button">Continua con Apple</button>
+            <p class="accedi">Hai già un account? <a id="accedi" href="index.html">Accedi</a></p>
         </div>
     </div>
     <script>
@@ -223,6 +223,11 @@
             messaggio.textContent = testo;
             messaggio.className = ok ? 'messaggio ok' : 'messaggio';
             messaggio.hidden = false;
+        }
+
+        function entra() {
+            sessionStorage.setItem('take-that-account', '1');
+            location.href = 'index.html';
         }
 
         form.addEventListener('submit', function (event) {
@@ -243,8 +248,14 @@
                 avviso('Accetta i Termini di Servizio e l\'Informativa sulla Privacy.');
                 return;
             }
-            sessionStorage.setItem('take-that-account', '1');
-            location.href = 'index.html';
+            entra();
+        });
+
+        document.getElementById('google').addEventListener('click', entra);
+        document.getElementById('apple').addEventListener('click', entra);
+        document.getElementById('accedi').addEventListener('click', function (event) {
+            event.preventDefault();
+            entra();
         });
     </script>
 </body>
