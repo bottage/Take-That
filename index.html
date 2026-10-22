@@ -2,6 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <script>
+        if (sessionStorage.getItem('take-that-account') !== '1') {
+            location.replace('signup.html');
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social App - Home</title>
     <style>
@@ -120,16 +125,15 @@
         .bottom-element {
             min-height: 148px;
         }
-        .impostazioni {
+        .io {
             position: absolute;
             bottom: 18px;
-            left: 16px;
+            right: 16px;
             z-index: 3;
             width: 36px;
             height: 36px;
             border-radius: 50%;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.18));
-            border: none;
             color: #fff;
             -webkit-backdrop-filter: blur(20px) saturate(1.5);
             backdrop-filter: blur(20px) saturate(1.5);
@@ -138,14 +142,25 @@
                 0 12px 22px rgba(0, 20, 50, 0.28);
             display: grid;
             place-items: center;
+            text-decoration: none;
             transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
         }
-        .impostazioni svg {
+        .io svg {
             width: 18px;
             height: 18px;
             display: block;
         }
-        .impostazioni:active {
+        .io img {
+            position: absolute;
+            right: -3px;
+            bottom: -2px;
+            width: 18px;
+            height: 12px;
+            object-fit: cover;
+            border-radius: 2px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
+        }
+        .io:active {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12));
             transform: scale(0.94);
             box-shadow: 0 3px 8px rgba(0, 20, 50, 0.24);
@@ -155,10 +170,12 @@
 <body>
     <div class="phone-frame">
         <div class="screen">
-            <a href="impostazioni.html" class="impostazioni" aria-label="Impostazioni">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill="currentColor" d="M10.1 2h3.8l.5 2.4c.6.2 1.2.5 1.7.9l2.2-1.1 2.7 2.7-1.1 2.2c.4.5.7 1.1.9 1.7l2.4.5v3.8l-2.4.5a7 7 0 0 1-.9 1.7l1.1 2.2-2.7 2.7-2.2-1.1a7 7 0 0 1-1.7.9l-.5 2.4h-3.8l-.5-2.4a7 7 0 0 1-1.7-.9L6 21.3 3.3 18.6l1.1-2.2a7 7 0 0 1-.9-1.7L1.1 14.2V10.4l2.4-.5c.2-.6.5-1.2.9-1.7L3.3 6 6 3.3l2.2 1.1c.5-.4 1.1-.7 1.7-.9L10.1 2zm1.9 6.2a3.8 3.8 0 1 0 .01 7.61A3.8 3.8 0 0 0 12 8.2z"/>
+            <a href="profilo.html" class="io" aria-label="Teo_04, sei connesso">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8.5" r="3" stroke="currentColor" stroke-width="1.7"/>
+                    <path d="M6 19.2c.8-2.8 3-4.2 6-4.2s5.2 1.4 6 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
                 </svg>
+                <img src="https://flagcdn.com/w80/it.png" alt="">
             </a>
             <div class="top-logo">
                 <a href="scatta.html" class="btn-scatta" style="text-decoration: none; display: inline-block;">SCATTA</a>
@@ -175,10 +192,6 @@
                 <a href="mappa.html" class="menu-btn">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="11" r="2" stroke="currentColor" stroke-width="1.7"/></svg>
                     MAPPA
-                </a>
-                <a href="profilo.html" class="menu-btn">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8.5" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M6 19.2c.8-2.8 3-4.2 6-4.2s5.2 1.4 6 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-                    PROFILO
                 </a>
             </div>
             <div class="bottom-element"></div>
