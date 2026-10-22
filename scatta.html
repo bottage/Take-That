@@ -104,50 +104,130 @@
             text-shadow: 0 1px 4px rgba(0,0,0,0.5);
             margin-bottom: 10px;
         }
-        .viewfinder {
-            flex: 1;
-            border-radius: 18px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.35);
-            border: 3px solid rgba(255,255,255,0.55);
-            background: #222;
+        .screen.inquadratura {
+            background: #0c0c0e;
         }
-        .viewfinder img,
+        .screen.inquadratura .header-title,
+        .screen.inquadratura .top-bar > div {
+            display: none;
+        }
+        .screen.inquadratura .top-bar {
+            justify-content: flex-start;
+        }
+        #step-camera {
+            justify-content: center;
+        }
+        .mirino {
+            position: relative;
+            width: calc(100% + 32px);
+            margin-left: -16px;
+            margin-right: -16px;
+            margin-top: 0;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #161616;
+            flex-shrink: 0;
+        }
+        .mirino-stage {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .mirino-stage img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform-origin: center center;
+            transition: filter 0.2s ease;
+        }
+        .mirino.lampo .mirino-stage img {
+            filter: brightness(1.22) saturate(0.92);
+        }
+        .mirino-guida { display: none; }
+        .mirino.scatto::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: white;
+            animation: flash 0.35s ease-out;
+            pointer-events: none;
+        }
+        @keyframes flash {
+            from { opacity: 0.9; }
+            to { opacity: 0; }
+        }
+        .zoom-letto {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+        }
+        .zoom-rocker {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .zoom-rocker button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.45);
+            color: #fff;
+            font: 700 18px/1 'Segoe UI', Tahoma, sans-serif;
+            cursor: pointer;
+        }
+        .zoom-rocker button:active { transform: scale(0.94); }
+        .scatto-comandi {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 36px 6px;
+        }
+        .flash-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+        .flash-btn svg { width: 20px; height: 20px; display: block; }
+        .flash-btn[aria-pressed="true"] {
+            background: #fff;
+            color: #e2b203;
+        }
+        .flash-btn:active { transform: scale(0.94); }
+        .scatto-equilibrio { width: 44px; height: 44px; }
+        .shutter-wrap {
+            display: flex;
+            justify-content: center;
+        }
         .polaroid img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
-        .viewfinder.flash::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: white;
-            animation: flash 0.35s ease-out;
-        }
-        @keyframes flash {
-            from { opacity: 0.9; }
-            to { opacity: 0; }
-        }
-        .corner {
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            border: 3px solid #fff;
-            z-index: 2;
-        }
-        .corner.tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
-        .corner.tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
-        .corner.bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
-        .corner.br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
-        .shutter-wrap {
-            display: flex;
-            justify-content: center;
-            padding-top: 16px;
-        }
         .shutter {
+            position: relative;
             width: 78px;
             height: 78px;
             padding: 0;
@@ -161,18 +241,34 @@
         }
         .shutter::before {
             content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
             width: 62px;
             height: 62px;
             border-radius: 50%;
-            background: #fff;
+            background: linear-gradient(145deg, #2196F3, #0d47a1);
+            box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
             transition: transform 0.12s ease, background 0.12s ease;
         }
+        .shutter-aereo {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
+            color: #fff;
+            pointer-events: none;
+            filter: drop-shadow(0 1px 1px rgba(13, 71, 161, 0.45));
+        }
         .shutter:hover::before {
-            background: #f4f7fb;
+            background: linear-gradient(145deg, #42A5F5, #1565C0);
         }
         .shutter:active::before {
+            transform: translate(-50%, -50%) scale(0.88);
+        }
+        .shutter:active .shutter-aereo {
             transform: scale(0.88);
-            background: #e8eef5;
         }
         .polaroid {
             background: #fff;
@@ -371,6 +467,14 @@
             display: block;
         }
         .viewer-chat:active { transform: scale(0.94); }
+        .polaroid-foto {
+            height: 100%;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+        .polaroid-foto img {
+            transform-origin: center center;
+        }
         .polaroid img {
             height: calc(100% - 0px);
             border-radius: 2px;
@@ -697,11 +801,144 @@
             margin-top: 6px;
             color: #333;
         }
+        html.telefono-orizzontale .phone-frame {
+            width: auto;
+            height: min(360px, calc(100vh - 8px));
+            max-width: calc(100vw - 8px);
+            aspect-ratio: 17 / 9;
+        }
+        html.telefono-orizzontale .screen {
+            padding: 12px 16px;
+        }
+        html.telefono-orizzontale .top-bar { margin-bottom: 8px; }
+        html.telefono-orizzontale .header-title { font-size: 18px; }
+        html.telefono-orizzontale .polaroid {
+            height: 148px;
+            margin: 4px auto 8px;
+        }
+        html.telefono-orizzontale .screen.inquadratura {
+            padding: 0;
+        }
+        html.telefono-orizzontale .screen.inquadratura .top-bar {
+            position: absolute;
+            top: 10px;
+            left: 14px;
+            right: 14px;
+            margin: 0;
+            z-index: 4;
+        }
+        html.telefono-orizzontale #step-camera {
+            position: absolute;
+            inset: 0;
+        }
+        html.telefono-orizzontale .mirino {
+            position: absolute;
+            inset: 0;
+            width: auto;
+            height: auto;
+            max-width: none;
+            aspect-ratio: auto;
+            margin: 0;
+        }
+        html.telefono-orizzontale .mirino-guida {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            z-index: 2;
+            height: 100%;
+            width: auto;
+            aspect-ratio: 4 / 3;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.28);
+        }
+        html.telefono-orizzontale .mirino-guida span {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border: 3px solid #fff;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+        }
+        html.telefono-orizzontale .mirino-guida span:nth-child(1) {
+            top: 12px;
+            left: 12px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+        html.telefono-orizzontale .mirino-guida span:nth-child(2) {
+            top: 12px;
+            right: 12px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+        html.telefono-orizzontale .mirino-guida span:nth-child(3) {
+            bottom: 12px;
+            left: 12px;
+            border-right: 0;
+            border-top: 0;
+        }
+        html.telefono-orizzontale .mirino-guida span:nth-child(4) {
+            bottom: 12px;
+            right: 12px;
+            border-left: 0;
+            border-top: 0;
+        }
+        html.telefono-orizzontale .zoom-rocker {
+            left: 18px;
+            right: auto;
+            z-index: 3;
+        }
+        html.telefono-orizzontale .zoom-letto { z-index: 3; }
+        html.telefono-orizzontale .scatto-comandi {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            bottom: 0;
+            z-index: 3;
+            margin: 0;
+            width: auto;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 0;
+        }
+        html.telefono-orizzontale .flash-btn {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        html.telefono-orizzontale .scatto-equilibrio { display: none; }
+        .gira-telefono {
+            position: fixed;
+            right: 28px;
+            bottom: 28px;
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: 50%;
+            background: #fff;
+            color: #1565C0;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+        }
+        .gira-telefono svg { width: 26px; height: 26px; display: block; }
+        .gira-telefono[hidden] { display: none; }
+        .gira-telefono:active { transform: scale(0.94); }
+        html.telefono-orizzontale .gira-telefono { color: #0d47a1; }
     </style>
 </head>
 <body>
+    <button type="button" class="gira-telefono" id="giraTelefono" aria-pressed="false" aria-label="Gira il telefono">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7.5 8.5V6.2A2.2 2.2 0 0 1 9.7 4h7.1A2.2 2.2 0 0 1 19 6.2v7.1a2.2 2.2 0 0 1-2.2 2.2h-2.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M4 14.2v3.6A2.2 2.2 0 0 0 6.2 20H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M8.2 16.2 4.8 13.8 8.2 11.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
     <div class="phone-frame">
-        <div class="screen">
+            <div class="screen inquadratura">
             <div class="top-bar">
                 <a href="index.html" class="back-btn" aria-label="Indietro">
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -712,17 +949,28 @@
                 <div style="width: 40px;"></div>
             </div>
 
-            <!-- 1. Mirino (niente fotocamera vera) -->
             <div class="step active" id="step-camera">
-                <div class="viewfinder" id="viewfinder">
-                    <span class="corner tl"></span>
-                    <span class="corner tr"></span>
-                    <span class="corner bl"></span>
-                    <span class="corner br"></span>
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Mirino">
+                <div class="mirino" id="viewfinder">
+                    <div class="mirino-stage" id="mirinoStage">
+                        <img id="mirinoFoto" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80" alt="Mirino, inquadratura orizzontale">
+                    </div>
+                    <p class="zoom-letto" id="zoomLetto">1×</p>
+                    <div class="zoom-rocker">
+                        <button type="button" id="zoomPiu" aria-label="Avvicina">+</button>
+                        <button type="button" id="zoomMeno" aria-label="Allontana">−</button>
+                    </div>
+                    <div class="mirino-guida" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
                 </div>
-                <div class="shutter-wrap">
-                    <button class="shutter" type="button" aria-label="Scatta" onclick="scatta()"></button>
+                <div class="scatto-comandi">
+                    <button type="button" class="flash-btn" id="flashBtn" aria-pressed="false" aria-label="Flash">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 2 4 14h7l-1 8 10-14h-7l0-6z"/></svg>
+                    </button>
+                    <div class="shutter-wrap">
+                        <button class="shutter" type="button" aria-label="Scatta" onclick="scatta()">
+                            <svg class="shutter-aereo" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                        </button>
+                    </div>
+                    <div class="scatto-equilibrio"></div>
                 </div>
             </div>
 
@@ -730,7 +978,9 @@
             <div class="step" id="step-preview">
                 <p class="hint">Foto pronta. Inviala, oppure scatta di nuovo.</p>
                 <div class="polaroid">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Foto scattata">
+                    <div class="polaroid-foto">
+                        <img id="anteprimaFoto" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80" alt="Foto scattata">
+                    </div>
                 </div>
                 <button class="btn" type="button" onclick="cerca()">INVIA NEL MONDO</button>
                 <button class="btn ghost" type="button" onclick="mostra('camera')">RISCATTA</button>
@@ -886,6 +1136,7 @@
             waitTimers.forEach(clearTimeout);
             waitTimers = [];
             if (name !== 'done') chiudiFoto();
+            document.querySelector('.screen').classList.toggle('inquadratura', name === 'camera');
             document.querySelectorAll('.step').forEach(function (el) {
                 el.classList.toggle('active', el.id === 'step-' + name);
             });
@@ -899,6 +1150,7 @@
                 document.getElementById('step-done').classList.remove('arrivo');
                 document.getElementById('arrivoFlash').classList.remove('attivo');
             }
+            aggiornaGiro();
         }
 
         function avviaArrivo() {
@@ -916,12 +1168,67 @@
         }
 
         function scatta() {
-            const vf = document.getElementById('viewfinder');
-            vf.classList.remove('flash');
+            var vf = document.getElementById('viewfinder');
+            vf.classList.remove('scatto');
             void vf.offsetWidth;
-            vf.classList.add('flash');
+            vf.classList.add('scatto');
             setTimeout(function () { mostra('preview'); }, 280);
         }
+
+        var zoom = 1;
+        var pointers = {};
+        var pinchStart = 0;
+        var zoomStart = 1;
+        var stage = document.getElementById('mirinoStage');
+
+        function impostaZoom(z) {
+            zoom = Math.min(3, Math.max(1, Math.round(z * 100) / 100));
+            var scala = 'scale(' + zoom + ')';
+            document.getElementById('mirinoFoto').style.transform = scala;
+            document.getElementById('anteprimaFoto').style.transform = scala;
+            document.getElementById('zoomLetto').textContent = zoom.toFixed(1).replace('.', ',') + '×';
+        }
+
+        function distanza(a, b) {
+            var dx = a.x - b.x;
+            var dy = a.y - b.y;
+            return Math.hypot(dx, dy);
+        }
+
+        stage.addEventListener('pointerdown', function (event) {
+            stage.setPointerCapture(event.pointerId);
+            pointers[event.pointerId] = { x: event.clientX, y: event.clientY };
+            var ids = Object.keys(pointers);
+            if (ids.length === 2) {
+                pinchStart = distanza(pointers[ids[0]], pointers[ids[1]]);
+                zoomStart = zoom;
+            }
+        });
+        stage.addEventListener('pointermove', function (event) {
+            if (!pointers[event.pointerId]) return;
+            pointers[event.pointerId] = { x: event.clientX, y: event.clientY };
+            var ids = Object.keys(pointers);
+            if (ids.length < 2 || !pinchStart) return;
+            impostaZoom(zoomStart * (distanza(pointers[ids[0]], pointers[ids[1]]) / pinchStart));
+        });
+        function finePuntatore(event) {
+            delete pointers[event.pointerId];
+            if (Object.keys(pointers).length < 2) pinchStart = 0;
+        }
+        stage.addEventListener('pointerup', finePuntatore);
+        stage.addEventListener('pointercancel', finePuntatore);
+        stage.addEventListener('wheel', function (event) {
+            event.preventDefault();
+            impostaZoom(zoom * (event.deltaY < 0 ? 1.08 : 0.92));
+        }, { passive: false });
+        document.getElementById('zoomPiu').addEventListener('click', function () { impostaZoom(zoom + 0.5); });
+        document.getElementById('zoomMeno').addEventListener('click', function () { impostaZoom(zoom - 0.5); });
+
+        document.getElementById('flashBtn').addEventListener('click', function () {
+            var acceso = this.getAttribute('aria-pressed') !== 'true';
+            this.setAttribute('aria-pressed', acceso ? 'true' : 'false');
+            document.getElementById('viewfinder').classList.toggle('lampo', acceso);
+        });
 
         function cerca() {
             mostra('wait');
@@ -997,6 +1304,23 @@
                 mostraVoto(votoDi(FOTO_RICEVUTA));
             });
         }
+
+        var giroForzato = false;
+        function aggiornaGiro() {
+            var inCamera = document.querySelector('.screen').classList.contains('inquadratura');
+            var daTelefono = window.matchMedia('(orientation: landscape) and (max-height: 540px)').matches;
+            var acceso = inCamera && (giroForzato || daTelefono);
+            document.documentElement.classList.toggle('telefono-orizzontale', acceso);
+            var tasto = document.getElementById('giraTelefono');
+            tasto.hidden = !inCamera;
+            tasto.setAttribute('aria-pressed', acceso && giroForzato ? 'true' : 'false');
+        }
+        document.getElementById('giraTelefono').addEventListener('click', function () {
+            giroForzato = !giroForzato;
+            aggiornaGiro();
+        });
+        window.addEventListener('resize', aggiornaGiro);
+        aggiornaGiro();
 
         preparaVoto(document.getElementById('votoGrande'));
         mostraVoto(votoDi(FOTO_RICEVUTA));
